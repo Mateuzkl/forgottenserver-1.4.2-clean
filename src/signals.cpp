@@ -19,6 +19,7 @@
 #include "globalevent.h"
 #include "monster.h"
 #include "events.h"
+#include "store.h"
 #include "scheduler.h"
 #include "databasetasks.h"
 
@@ -38,6 +39,7 @@ extern CreatureEvents* g_creatureEvents;
 extern GlobalEvents* g_globalEvents;
 extern Events* g_events;
 extern Chat* g_chat;
+extern Store* g_store;
 extern LuaEnvironment g_luaEnvironment;
 
 namespace {
@@ -107,6 +109,9 @@ void sighupHandler()
 
 	g_luaEnvironment.loadFile("data/global.lua");
 	std::cout << "Reloaded global.lua." << std::endl;
+
+	g_store->reload();
+	std::cout << "Reloaded store." << std::endl;
 
 	lua_gc(g_luaEnvironment.getLuaState(), LUA_GCCOLLECT, 0);
 }

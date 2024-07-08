@@ -488,6 +488,8 @@ enum item_t : uint16_t {
 
 	ITEM_AMULETOFLOSS = 2173,
 
+	ITEM_STORECOINS = 24774,
+
 	ITEM_DOCUMENT_RO = 1968, //read-only
 };
 
@@ -552,6 +554,7 @@ enum ReloadTypes_t : uint8_t  {
 	RELOAD_TYPE_SPELLS,
 	RELOAD_TYPE_TALKACTIONS,
 	RELOAD_TYPE_WEAPONS,
+	RELOAD_TYPE_STORE,
 };
 
 static constexpr int32_t CHANNEL_GUILD = 0x00;

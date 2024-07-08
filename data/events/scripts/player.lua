@@ -38,11 +38,31 @@ function Player:onLookInShop(itemType, count, description)
 end
 
 function Player:onMoveItem(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
-	if hasEventCallback(EVENT_CALLBACK_ONMOVEITEM) then
-		return EventCallback(EVENT_CALLBACK_ONMOVEITEM, self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
-	end
-	return RETURNVALUE_NOERROR
+    -- Store Inbox
+    local containerIdFrom = fromPosition.y - 64
+    local containerFrom = self:getContainerById(containerIdFrom)
+    if containerFrom then
+        if containerFrom:getId() == ITEM_STORE_INBOX and toPosition.y >= 1 and toPosition.y <= 11 and toPosition.y ~= 3 then
+            self:sendCancelMessage(RETURNVALUE_CONTAINERNOTENOUGHROOM)
+            return false
+        end
+    end
+
+    local containerTo = self:getContainerById(toPosition.y - 64)
+    if containerTo then
+        if (containerTo:getId() == ITEM_STORE_INBOX) then
+            self:sendCancelMessage(RETURNVALUE_CONTAINERNOTENOUGHROOM)
+            return false
+        end
+    end
+
+    if hasEventCallback(EVENT_CALLBACK_ONMOVEITEM) then
+        return EventCallback(EVENT_CALLBACK_ONMOVEITEM, self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
+    end
+
+    return RETURNVALUE_NOERROR
 end
+
 
 function Player:onItemMoved(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
 	if hasEventCallback(EVENT_CALLBACK_ONITEMMOVED) then

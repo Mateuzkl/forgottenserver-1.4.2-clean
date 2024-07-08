@@ -12,9 +12,16 @@ struct Account {
 	std::string key;
 	uint32_t id = 0;
 	time_t premiumEndsAt = 0;
+	uint32_t coinBalance = 0;
 	AccountType_t accountType = ACCOUNT_TYPE_NORMAL;
 
 	Account() = default;
+};
+
+class IOAccount {
+public:
+	static uint32_t getCoinBalance(uint32_t accountId);
+	static void addCoins(uint32_t accountId, int32_t coins);
 };
 
 #endif
