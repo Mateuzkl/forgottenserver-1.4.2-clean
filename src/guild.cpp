@@ -66,13 +66,34 @@ void Guild::addRank(uint32_t rankId, const std::string& rankName, uint8_t level)
 	ranks.emplace_back(std::make_shared<GuildRank>(rankId, rankName, level));
 }
 
+void Guild::setPoints(uint32_t _points) {
+	points = _points;
+	IOGuild::setPoints(id, points);
+}
+
+void Guild::setLevel(uint32_t _level) {
+	level = _level;
+	IOGuild::setLevel(id, level);
+}
+
 Guild* IOGuild::loadGuild(uint32_t guildId)
 {
 	Database& db = Database::getInstance();
-	if (DBResult_ptr result = db.storeQuery(fmt::format("SELECT `name` FROM `guilds` WHERE `id` = {:d}", guildId))) {
+	std::ostringstream query;
+	query << "SELECT `name`, `level`, `points` FROM `guilds` WHERE `id` = " << guildId;
+	if (DBResult_ptr result = db.storeQuery(query.str())) {
 		Guild* guild = new Guild(guildId, result->getString("name"));
 
-		if ((result = db.storeQuery(fmt::format("SELECT `id`, `name`, `level` FROM `guild_ranks` WHERE `guild_id` = {:d}", guildId)))) {
+		// Removendo a atribuição do saldo bancário
+		// guild->setBankBalance(result->getNumber<uint64_t>("balance"));
+
+		guild->setLevel(result->getNumber<uint32_t>("level"));
+		guild->setPoints(result->getNumber<uint32_t>("points"));
+
+		query.str(std::string());
+		query << "SELECT `id`, `name`, `level` FROM `guild_ranks` WHERE `guild_id` = " << guildId;
+
+		if ((result = db.storeQuery(query.str()))) {
 			do {
 				guild->addRank(result->getNumber<uint32_t>("id"), result->getString("name"), result->getNumber<uint16_t>("level"));
 			} while (result->next());
@@ -91,4 +112,21 @@ uint32_t IOGuild::getGuildIdByName(const std::string& name)
 		return 0;
 	}
 	return result->getNumber<uint32_t>("id");
+}
+
+
+void IOGuild::setLevel(uint32_t guildId, uint32_t newlevel)
+{
+	Database& db = Database::getInstance();
+	std::ostringstream query;
+	query << "UPDATE `guilds` SET `level` = " << newlevel << " WHERE `id` = " << guildId;
+	db.executeQuery(query.str());
+}
+
+void IOGuild::setPoints(uint32_t guildId, uint32_t newPoints)
+{
+	Database& db = Database::getInstance();
+	std::ostringstream query;
+	query << "UPDATE `guilds` SET `points` = " << newPoints << " WHERE `id` = " << guildId;
+	db.executeQuery(query.str());
 }

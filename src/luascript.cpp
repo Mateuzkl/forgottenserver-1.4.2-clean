@@ -2579,6 +2579,11 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Guild", "getName", LuaScriptInterface::luaGuildGetName);
 	registerMethod("Guild", "getMembersOnline", LuaScriptInterface::luaGuildGetMembersOnline);
 
+	registerMethod("Guild", "getPoints", LuaScriptInterface::luaGuildGetPoints);
+	registerMethod("Guild", "setPoints", LuaScriptInterface::luaGuildSetPoints);
+	registerMethod("Guild", "getLevel", LuaScriptInterface::luaGuildGetLevel);
+	registerMethod("Guild", "setLevel", LuaScriptInterface::luaGuildSetLevel);
+
 	registerMethod("Guild", "addRank", LuaScriptInterface::luaGuildAddRank);
 	registerMethod("Guild", "getRankById", LuaScriptInterface::luaGuildGetRankById);
 	registerMethod("Guild", "getRankByLevel", LuaScriptInterface::luaGuildGetRankByLevel);
@@ -9161,6 +9166,8 @@ int LuaScriptInterface::luaPlayerGetBankBalance(lua_State* L)
 	return 1;
 }
 
+
+
 int LuaScriptInterface::luaPlayerSetBankBalance(lua_State* L)
 {
 	// player:setBankBalance(bankBalance)
@@ -10883,6 +10890,62 @@ int LuaScriptInterface::luaGuildGetRankByLevel(lua_State* L)
 		setField(L, "name", rank->name);
 		setField(L, "level", rank->level);
 	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaGuildGetLevel(lua_State* L)
+{
+	// guild:getLevel()
+	Guild* guild = getUserdata<Guild>(L, 1);
+	if (guild) {
+		lua_pushnumber(L, guild->getLevel());
+	}
+	else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaGuildGetPoints(lua_State* L)
+{
+	// guild:getPoints()
+	Guild* guild = getUserdata<Guild>(L, 1);
+	if (guild) {
+		lua_pushnumber(L, guild->getPoints());
+	}
+	else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaGuildSetLevel(lua_State* L)
+{
+	// guild:setLevel(newlevel)
+	Guild* guild = getUserdata<Guild>(L, 1);
+	uint32_t newlevel = getNumber<uint32_t>(L, 2);
+	if (guild) {
+		guild->setLevel(newlevel);
+		pushBoolean(L, true);
+	}
+	else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaGuildSetPoints(lua_State* L)
+{
+	// guild:setPoints(newpoints)
+	Guild* guild = getUserdata<Guild>(L, 1);
+	uint32_t newpoints = getNumber<uint32_t>(L, 2);
+	if (guild) {
+		guild->setPoints(newpoints);
+		pushBoolean(L, true);
+	}
+	else {
 		lua_pushnil(L);
 	}
 	return 1;
