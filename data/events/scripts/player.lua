@@ -40,20 +40,28 @@ end
 function Player:onMoveItem(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
     -- Store Inbox
     local containerIdFrom = fromPosition.y - 64
-    local containerFrom = self:getContainerById(containerIdFrom)
-    if containerFrom then
-        if containerFrom:getId() == ITEM_STORE_INBOX and toPosition.y >= 1 and toPosition.y <= 11 and toPosition.y ~= 3 then
-            self:sendCancelMessage(RETURNVALUE_CONTAINERNOTENOUGHROOM)
-            return false
+    if containerIdFrom >= 0 and containerIdFrom < 256 then
+        local containerFrom = self:getContainerById(containerIdFrom)
+        if containerFrom then
+            if containerFrom:getId() == ITEM_STORE_INBOX and toPosition.y >= 1 and toPosition.y <= 11 and toPosition.y ~= 3 then
+                self:sendCancelMessage(RETURNVALUE_CONTAINERNOTENOUGHROOM)
+                return false
+            end
         end
     end
 
-    local containerTo = self:getContainerById(toPosition.y - 64)
-    if containerTo then
-        if (containerTo:getId() == ITEM_STORE_INBOX) then
-            self:sendCancelMessage(RETURNVALUE_CONTAINERNOTENOUGHROOM)
-            return false
+    local containerIdTo = toPosition.y - 64
+    if containerIdTo >= 0 and containerIdTo < 256 then
+        local containerTo = self:getContainerById(containerIdTo)
+        if containerTo then
+            if containerTo:getId() == ITEM_STORE_INBOX then
+                self:sendCancelMessage(RETURNVALUE_CONTAINERNOTENOUGHROOM)
+                return false
+            end
         end
+    end
+
+    if toPosition.y >= 0 and toPosition.y < 64 then
     end
 
     if hasEventCallback(EVENT_CALLBACK_ONMOVEITEM) then
@@ -62,7 +70,6 @@ function Player:onMoveItem(item, count, fromPosition, toPosition, fromCylinder, 
 
     return RETURNVALUE_NOERROR
 end
-
 
 function Player:onItemMoved(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
 	if hasEventCallback(EVENT_CALLBACK_ONITEMMOVED) then
