@@ -2,8 +2,8 @@
 <store>
     <!-- Category: Items -->
     <category name="Items" state="1" icons="Item_SolarAxe.png" description="Buy items">
-        <offer name="Solar Axe" state="1" price="100" icons="Item_SolarAxe.png" description="It's fucking orange. What else could you ask for?" message="Thank you for buying this overpriced item." script="items.lua" />
-        <offer name="Thunder Hammer" price="100" icons="Item_thunderhammer.png" description="Just pretend you're Thor." message="Thank you for buying this overpriced item." script="items.lua" />
+        <offer name="Solar Axe" state="1" price="100" icons="Item_SolarAxe.png" description="It's orange. What else could you ask for?" message="Thank you for buying this item." script="items.lua" />
+        <offer name="Thunder Hammer" price="100" icons="Item_thunderhammer.png" description="Just pretend you're Thor." message="Thank you for buying this item." script="items.lua" />
     </category>
 
     <!-- Category: Premium Time -->
@@ -17,7 +17,7 @@
     <!-- Category: Extra Services -->
     <category name="Extra Services" icons="Category_ExtraServices.png" description="Buy an Extra Service to transfer a character to another game world or to change your character's name or sex.">
         <offer name="Sex Change" price="120" icons="sexchanger.png" description="If you are playing a male character, but would rather play a female one - or vice versa, you can purchase a Character Sex Change. All outfits that you have purchased or earned by completing quests will of course still be available after you changed your character's sex.&#10;Note: You will change the sex of the character who is purchasing this product in the Store." message="Thank you for your purchase! Note that your character is now wearing the default outfit until you change it to an outfit of your choice." script="sexchange.lua" />
-        <offer name="Name Change" price="250" icons="Name_Change.png" description="Tired of your current character name? Here you can purchase a new one. Note that also your new name must follow the naming conventions stated in the Server Rules or your character might get namelocked.&#10;In case your newly selected name is not available, the purchase will be cancelled and no Store Coins will be charged. In this case, you can simply try once more with another new name.&#10;Note: You will change the name of the character who is purchasing this product in the Store." message="Thank you for your purchase! To finalise the Character Name Change, please start your client anew. Note that you cannot enter houses or open doors anymore which are still labelled with your old character name until the responsible character invites you with your new name." script="namechange.lua" />
+        <offer name="Name Change" price="250" icons="Name_Change.png" description="Tired of your current character name? Here you can purchase a new one. Note that also your new name must follow the naming conventions stated in the Server Rules or your character might get namelocked.&#10;In case your newly selected name is not available, the purchase will be cancelled and no Store Coins will be charged. In this case, you can simply try once more with another new name.&#10;Note: You will change the name of the character who is purchasing this product in the Store." message="Thank you for your purchase! To finalize the Character Name Change, please start your client anew. Note that you cannot enter houses or open doors anymore which are still labelled with your old character name until the responsible character invites you with your new name." script="namechange.lua" />
         <offer name="World Transfer" price="750" icons="World_Transfer.png" />
         <offer name="Express World Transfer" price="1500" icons="Express_World_Transfer.png" />
     </category>
@@ -25,12 +25,47 @@
     <!-- Category: Mounts -->
     <category name="Mounts" icons="Category_Mounts.png" description="Buy your character one or more of the fabulous Mounts offered here.">
         <offer name="Flying Divan" price="900" icons="Flying_Divan.png" description="Here you can purchase the Mount &quot;Flying Divan&quot; for your character. Riding on a mount is not only cool, but also gives your character a speed boost.&#10;Note: The Mount will only be received by the character who purchased it in the Store." message="Thank you for your purchase! Your mount is now available.&#10;Enjoy the ride!" script="mounts.lua" />
-        <offer name="Cooper Fly" price="660" icons="Copper_Fly.png" description="Here you can purchase the Mount &quot;Black Stag&quot; for your character. Riding on a mount is not only cool, but also gives your character a speed boost.&#10;Note: The Mount will only be received by the character who purchased it in the Store." message="Thank you for your purchase! Your mount is now available.&#10;Enjoy the ride!" script="mounts.lua" />
+        <offer name="Cooper Fly" price="660" icons="Copper_Fly.png" description="Here you can purchase the Mount &quot;Copper Fly&quot; for your character. Riding on a mount is not only cool, but also gives your character a speed boost.&#10;Note: The Mount will only be received by the character who purchased it in the Store." message="Thank you for your purchase! Your mount is now available.&#10;Enjoy the ride!" script="mounts.lua" />
     </category>
-    
+
     <!-- Category: Outfits -->
     <category name="Outfits" icons="Category_Outfits.png" description="Buy your character one or more of the classy Outfits offered here.">
-        <offer name="Full Puppeteer Outfit" price="870" icons="Outfit_Puppeteer_Male_Addon_3.png;Outfit_Puppeteer_Female_Addon_3.png" description="Give your character a new look by getting it a new Outfit.&#10;Here you can purchase the Full Outfit &quot;Puppeteer&quot; - therefore your character will receive the Basic Outfit + 2 Addons at a reduced package price.&#10;Note: The Outfit will only be received by the character who purchased it in the Store." message="Thank you for your purchase! Your new outfit is now available.&#10;Show off the latest fashion!" script="outfits.lua" />
+        <offer name="Full Puppeteer Outfit" price="1" icons="Outfit_Puppeteer_Male_Addon_3.png;Outfit_Puppeteer_Female_Addon_3.png" description="Give your character a new look by getting it a new Outfit.&#10;Here you can purchase the Full Outfit &quot;Puppeteer&quot; - therefore your character will receive the Basic Outfit + 2 Addons at a reduced package price.&#10;Note: The Outfit will only be received by the character who purchased it in the Store." message="Thank you for your purchase! Your new outfit is now available.&#10;Show off the latest fashion!" script="outfits.lua" />
+    </category>
+	
+    <!-- Category: Auras -->
+    <category name="Auras" icons="Category_Outfits.png" description="Buy your character one or more of the classy Auras offered here.">
+        <offer name="Blue Aura" auraID="1" price="1" icons="Outfit_Puppeteer_Male_Addon_3.png;Outfit_Puppeteer_Female_Addon_3.png" description="Give your character a new look by getting it a new Aura." message="Thank you for your purchase! Your new aura is now available." script="auras.lua" />
+        <offer name="Dark Aura" auraID="2" price="1" icons="Outfit_Puppeteer_Male_Addon_3.png;Outfit_Puppeteer_Female_Addon_3.png" description="Give your character a new look by getting it a new Aura." message="Thank you for your purchase! Your new aura is now available." script="auras.lua" />
+        <offer name="War Bear" auraID="3" price="1" icons="Outfit_Puppeteer_Male_Addon_3.png;Outfit_Puppeteer_Female_Addon_3.png" description="Give your character a new look by getting it a new Aura." message="Thank you for your purchase! Your new aura is now available." script="auras.lua" />
+        <!-- Add more offers as needed -->
+    </category>
+
+    <!-- Category: Wings -->
+    <category name="Wings" icons="Category_Outfits.png" description="Buy your character one or more of the classy Wings offered here.">
+        <offer name="wing1" Wingid="1" price="1" icons="Outfit_Puppeteer_Male_Addon_3.png;Outfit_Puppeteer_Female_Addon_3.png" description="Give your character a new look by getting it a new Wing." message="Thank you for your purchase! Your new wing is now available." script="wings.lua" />
+        <offer name="wing2" Wingid="2" price="1" icons="Outfit_Puppeteer_Male_Addon_3.png;Outfit_Puppeteer_Female_Addon_3.png" description="Give your character a new look by getting it a new Wing." message="Thank you for your purchase! Your new wing is now available." script="wings.lua" />
+        <offer name="wing3" Wingid="3" price="1" icons="Outfit_Puppeteer_Male_Addon_3.png;Outfit_Puppeteer_Female_Addon_3.png" description="Give your character a new look by getting it a new Wing." message="Thank you for your purchase! Your new wing is now available." script="wings.lua" />
+        <!-- Add more offers as needed -->
+    </category>
+
+    <!-- Category: Shaders -->
+    <category name="Shaders" icons="Category_Outfits.png" description="Buy your character one or more of the classy Shaders offered here.">
+        <offer name="Rainbow Outfit" Shaderid="1" price="1" icons="Outfit_Rainbow.png" description="Give your character a new look by getting it a new Shader." message="Thank you for your purchase! Your new shader is now available." script="shaders.lua" />
+        <offer name="Brazil Outfit" Shaderid="2" price="1" icons="Outfit_Brazil.png" description="Give your character a new look by getting it a new Shader." message="Thank you for your purchase! Your new shader is now available." script="shaders.lua" />
+        <offer name="Gold Outfit" Shaderid="3" price="1" icons="Outfit_Gold.png" description="Give your character a new look by getting it a new Shader." message="Thank you for your purchase! Your new shader is now available." script="shaders.lua" />
+        <offer name="Sweden Outfit" Shaderid="4" price="1" icons="Outfit_Sweden.png" description="Give your character a new look by getting it a new Shader." message="Thank you for your purchase! Your new shader is now available." script="shaders.lua" />
+        <offer name="Polska Outfit" Shaderid="5" price="1" icons="Outfit_Polska.png" description="Give your character a new look by getting it a new Shader." message="Thank you for your purchase! Your new shader is now available." script="shaders.lua" />
+        <offer name="Stars Outfit" Shaderid="6" price="1" icons="Outfit_Stars.png" description="Give your character a new look by getting it a new Shader." message="Thank you for your purchase! Your new shader is now available." script="shaders.lua" />
+        <offer name="Rainbow Outline" Shaderid="7" price="1" icons="Outfit_Rainbow_Outline.png" description="Give your character a new look by getting it a new Shader." message="Thank you for your purchase! Your new shader is now available." script="shaders.lua" />
+        <offer name="Dual Outfit" Shaderid="8" price="1" icons="Outfit_Dual.png" description="Give your character a new look by getting it a new Shader." message="Thank you for your purchase! Your new shader is now available." script="shaders.lua" />
+        <offer name="Red Outline" Shaderid="9" price="1" icons="Outfit_Red_Outline.png" description="Give your character a new look by getting it a new Shader." message="Thank you for your purchase! Your new shader is now available." script="shaders.lua" />
+        <offer name="Slim Outline" Shaderid="10" price="1" icons="Outfit_Slim_Outline.png" description="Give your character a new look by getting it a new Shader." message="Thank you for your purchase! Your new shader is now available." script="shaders.lua" />
+        <offer name="Line Outline" Shaderid="11" price="1" icons="Outfit_Line_Outline.png" description="Give your character a new look by getting it a new Shader." message="Thank you for your purchase! Your new shader is now available." script="shaders.lua" />
+        <offer name="Retro Outline" Shaderid="12" price="1" icons="Outfit_Retro_Outline.png" description="Give your character a new look by getting it a new Shader." message="Thank you for your purchase! Your new shader is now available." script="shaders.lua" />
+        <offer name="Circle Outfit" Shaderid="13" price="1" icons="Outfit_Circle.png" description="Give your character a new look by getting it a new Shader." message="Thank you for your purchase! Your new shader is now available." script="shaders.lua" />
+        <offer name="Outline Rainbow" Shaderid="14" price="1" icons="Outfit_Outline_Rainbow.png" description="Give your character a new look by getting it a new Shader." message="Thank you for your purchase! Your new shader is now available." script="shaders.lua" />
+        <!-- Add more offers as needed -->
     </category>
 
     <!-- Category: Blessings -->

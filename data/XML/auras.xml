@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<auras>
+<aura id="1" clientid="1657" name="blue aura" speed="20" />
+	<aura id="2" clientid="1658" name="Dark Aura" speed="20" />
+	<aura id="3" clientid="1659" name="War Bear" speed="20" />
+	<aura id="4" clientid="1660" name="Fire Aura" speed="20" />
+	<aura id="5" clientid="1661" name="aura1" speed="20" />
+	<aura id="6" clientid="1662" name="Aura2" speed="20" />
+	<aura id="7" clientid="1663" name="Aura3" speed="20" />
+	<aura id="8" clientid="1664" name="Aura4" speed="20" />
+	<aura id="9" clientid="1665" name="Aura5" speed="20" />
+	<aura id="10" clientid="1666" name="Aura6" speed="20" />
+	<aura id="11" clientid="1667" name="Aura7" speed="20" />
+	<aura id="12" clientid="1668" name="Aura8" speed="20" />
+	<aura id="13" clientid="1669" name="Aura9" speed="20" />
+	<aura id="14" clientid="1670" name="Aura10" speed="20" />
+	<aura id="15" clientid="1671" name="Aura11" speed="20" />
+	<aura id="16" clientid="1754" name="Aura12" speed="20" />
+	<aura id="17" clientid="1755" name="Aura13" speed="20" />
+	<aura id="18" clientid="1757" name="Aura14" speed="20" />
+<aura id="19" clientid="1767" name="Aura14" speed="20" />
+<aura id="20" clientid="1768" name="Aura14" speed="20" />
+<aura id="21" clientid="1769" name="Aura14" speed="20" />
+<aura id="22" clientid="1770" name="Aura14" speed="20" />
+<aura id="23" clientid="1771" name="Aura14" speed="20" />
+<aura id="24" clientid="1772" name="Aura14" speed="20" />
+<aura id="25" clientid="1773" name="Aura14" speed="20" />
+<aura id="26" clientid="1774" name="Aura14" speed="20" />
+<aura id="27" clientid="1775" name="Aura14" speed="20" />
+<aura id="28" clientid="1776" name="Aura14" speed="20" />
+<aura id="29" clientid="1777" name="Aura14" speed="20" />
+<aura id="30" clientid="1778" name="Aura14" speed="20" />
+<aura id="31" clientid="1779" name="Aura14" speed="20" />
+<aura id="32" clientid="1780" name="Aura14" speed="20" />
+<aura id="33" clientid="1781" name="Aura14" speed="20" />
+<aura id="34" clientid="1782" name="Aura14" speed="20" />
+<aura id="35" clientid="1783" name="Aura14" speed="20" />
+<aura id="36" clientid="1784" name="Aura14" speed="20" />
+<aura id="37" clientid="1785" name="Aura14" speed="20" />
+<aura id="38" clientid="1786" name="Aura14" speed="20" />
+<aura id="39" clientid="1787" name="Aura14" speed="20" />
+<aura id="40" clientid="1788" name="Aura14" speed="20" />
+<aura id="41" clientid="1789" name="Aura14" speed="20" />
+<aura id="42" clientid="1790" name="Aura14" speed="20" />
+<aura id="43" clientid="1791" name="Aura14" speed="20" />
+<aura id="44" clientid="1792" name="Aura14" speed="20" />
+<aura id="45" clientid="1793" name="Aura14" speed="20" />
+<aura id="46" clientid="1794" name="Aura14" speed="20" />
+<aura id="47" clientid="1795" name="Aura14" speed="20" />
+<aura id="48" clientid="1796" name="Aura14" speed="20" />
+<aura id="49" clientid="1797" name="Aura14" speed="20" />
+<aura id="50" clientid="1798" name="Aura14" speed="20" />
+<aura id="51" clientid="1799" name="Aura14" speed="20" />
+<aura id="52" clientid="1800" name="Aura14" speed="20" />
+<aura id="53" clientid="1801" name="Aura14" speed="20" />
+<aura id="54" clientid="1802" name="Aura14" speed="20" />
+<aura id="55" clientid="1803" name="Aura14" speed="20" />
+<aura id="56" clientid="1804" name="Aura14" speed="20" />
+<aura id="57" clientid="1805" name="Aura14" speed="20" />
+<aura id="58" clientid="1806" name="Aura14" speed="20" />
+<aura id="59" clientid="1807" name="Aura14" speed="20" />
+<aura id="60" clientid="1808" name="Aura14" speed="20" />
+<aura id="61" clientid="1809" name="Aura14" speed="20" />
+<aura id="62" clientid="1810" name="Aura14" speed="20" />
+<aura id="63" clientid="1811" name="Aura14" speed="20" />
+<aura id="64" clientid="1812" name="Aura14" speed="20" />
+<aura id="65" clientid="1813" name="Aura14" speed="20" />
+<aura id="66" clientid="1814" name="Aura14" speed="20" />
+<aura id="67" clientid="1815" name="Aura14" speed="20" />
+<aura id="68" clientid="1816" name="Aura14" speed="20" />
+<aura id="69" clientid="1817" name="Aura14" speed="20" />
+<aura id="70" clientid="1818" name="Aura14" speed="20" />
+<aura id="71" clientid="1819" name="Aura14" speed="20" />
+<aura id="72" clientid="1820" name="Aura14" speed="20" />
+<aura id="73" clientid="1821" name="Aura14" speed="20" />
+<aura id="74" clientid="1822" name="Aura14" speed="20" />
+<aura id="75" clientid="1823" name="Aura14" speed="20" />
+<aura id="76" clientid="1824" name="Aura14" speed="20" />
+<aura id="77" clientid="1825" name="Aura14" speed="20" />
+<aura id="78" clientid="1826" name="Aura14" speed="20" />
+<aura id="79" clientid="1827" name="Aura14" speed="20" />
+<aura id="80" clientid="1828" name="Aura14" speed="20" />
+<aura id="81" clientid="1829" name="Aura14" speed="20" />
+<aura id="82" clientid="1830" name="Aura14" speed="20" />
+<aura id="83" clientid="1831" name="Aura14" speed="20" />
+<aura id="84" clientid="1832" name="Aura14" speed="20" />
+<aura id="85" clientid="1833" name="Aura14" speed="20" />
+<aura id="86" clientid="1835" name="Aura14" speed="20" />
+<aura id="87" clientid="1836" name="Aura14" speed="20" />
+<aura id="88" clientid="1837" name="Aura14" speed="20" />
+<aura id="89" clientid="1838" name="Aura14" speed="20" />
+
+
+</auras>
