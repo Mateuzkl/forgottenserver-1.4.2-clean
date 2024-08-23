@@ -21,6 +21,7 @@
 #include "mounts.h"
 #include "store.h"
 #include "storeinbox.h"
+#include "rewardchest.h"
 
 #include <bitset>
 
@@ -498,7 +499,13 @@ class Player final : public Creature, public Cylinder
 		void removeConditionSuppressions(uint32_t conditions);
 
 		DepotChest* getDepotChest(uint32_t depotId, bool autoCreate);
+<<<<<<< HEAD
 		DepotLocker* getDepotLocker(uint32_t depotId);
+=======
+		DepotLocker& getDepotLocker();
+		uint32_t getDepotItemCount();
+		RewardChest& getRewardChest();
+>>>>>>> 0da6263... Added Reward Container & Boss System (#14)
 		void onReceiveMail() const;
 		bool isNearDepotBox() const;
 
@@ -1259,6 +1266,11 @@ class Player final : public Creature, public Cylinder
 		Town* town = nullptr;
 		Vocation* vocation = nullptr;
 		StoreInbox* storeInbox = nullptr;
+<<<<<<< HEAD
+=======
+		std::shared_ptr<RewardChest> rewardChest = nullptr;
+		DepotLocker_ptr depotLocker = nullptr;
+>>>>>>> 0da6263... Added Reward Container & Boss System (#14)
 
 		uint32_t inventoryWeight = 0;
 		uint32_t capacity = 40000;

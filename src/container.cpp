@@ -202,6 +202,15 @@ bool Container::isHoldingItem(const Item* item) const
 	return false;
 }
 
+bool Container::isRewardCorpse() const {
+	for (Item* subItem : getItemList()) {
+		if (subItem->getID() == ITEM_REWARD_CONTAINER) {
+			return true;
+		}
+	}
+	return false;
+}
+
 void Container::onAddContainerItem(Item* item)
 {
 	SpectatorVec spectators;

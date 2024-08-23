@@ -991,6 +991,15 @@ itemAttrTypes stringToItemAttribute(const std::string& str)
 		return ITEM_ATTRIBUTE_STOREITEM;
 	} else if (str == "attackspeed") {
 		return ITEM_ATTRIBUTE_ATTACK_SPEED;
+<<<<<<< HEAD
+=======
+	} else if (str == "classification") {
+		return ITEM_ATTRIBUTE_CLASSIFICATION;
+	} else if (str == "tier") {
+		return ITEM_ATTRIBUTE_TIER;
+	} else if (str == "rewardid") {
+		return ITEM_ATTRIBUTE_REWARDID;
+>>>>>>> 0da6263... Added Reward Container & Boss System (#14)
 	}
 	return ITEM_ATTRIBUTE_NONE;
 }
@@ -1224,6 +1233,9 @@ const char* getReturnMessage(ReturnValue value)
 
 		case RETURNVALUE_YOUCANNOTUSETHISBED:
 			return "This bed can't be used, but Premium Account players can rent houses and sleep in beds there to regain health and mana.";
+			
+		case RETURNVALUE_REWARDCHESTEMPTY:
+			return "The chest is currently empty. You did not\ntake part in any battles in the last seven\ndays or already claimed your reward.";
 
 		default: // RETURNVALUE_NOTPOSSIBLE, etc
 			return "Sorry, not possible.";

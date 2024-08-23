@@ -1501,6 +1501,13 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ITEM_ATTRIBUTE_PLURALNAME)
 	registerEnum(ITEM_ATTRIBUTE_WEIGHT)
 	registerEnum(ITEM_ATTRIBUTE_ATTACK)
+<<<<<<< HEAD
+=======
+	registerEnum(ITEM_ATTRIBUTE_ATTACK_SPEED)
+	registerEnum(ITEM_ATTRIBUTE_CLASSIFICATION)
+	registerEnum(ITEM_ATTRIBUTE_TIER)
+	registerEnum(ITEM_ATTRIBUTE_REWARDID)
+>>>>>>> 0da6263... Added Reward Container & Boss System (#14)
 	registerEnum(ITEM_ATTRIBUTE_DEFENSE)
 	registerEnum(ITEM_ATTRIBUTE_EXTRADEFENSE)
 	registerEnum(ITEM_ATTRIBUTE_ARMOR)
@@ -1574,6 +1581,8 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ITEM_WILDGROWTH_PERSISTENT)
 	registerEnum(ITEM_WILDGROWTH_SAFE)
 	registerEnum(ITEM_STORE_INBOX)
+
+	registerEnum(ITEM_REWARD_CONTAINER)
 
 	registerEnum(WIELDINFO_NONE)
 	registerEnum(WIELDINFO_LEVEL)
@@ -2014,6 +2023,11 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn("configKeys", ConfigManager::MAX_PACKETS_PER_SECOND)
 	registerEnumIn("configKeys", ConfigManager::PLAYER_CONSOLE_LOGS)
 
+	registerEnumIn("configKeys", ConfigManager::REWARD_BASE_RATE);
+	registerEnumIn("configKeys", ConfigManager::REWARD_RATE_DAMAGE_DONE);
+	registerEnumIn("configKeys", ConfigManager::REWARD_RATE_DAMAGE_TAKEN);
+	registerEnumIn("configKeys", ConfigManager::REWARD_RATE_HEALING_DONE);
+
 	// os
 	registerMethod("os", "mtime", LuaScriptInterface::luaSystemTime);
 
@@ -2372,6 +2386,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Player", "getDepotChest", LuaScriptInterface::luaPlayerGetDepotChest);
 	registerMethod("Player", "getInbox", LuaScriptInterface::luaPlayerGetInbox);
+	registerMethod("Player", "getRewardChest", LuaScriptInterface::luaPlayerGetRewardChest);
 
 	registerMethod("Player", "getSkullTime", LuaScriptInterface::luaPlayerGetSkullTime);
 	registerMethod("Player", "setSkullTime", LuaScriptInterface::luaPlayerSetSkullTime);
@@ -8364,6 +8379,26 @@ int LuaScriptInterface::luaPlayerGetInbox(lua_State* L)
 		pushUserdata<Item>(L, inbox);
 		setItemMetatable(L, -1, inbox);
 	} else {
+		pushBoolean(L, false);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerGetRewardChest(lua_State* L)
+{
+	// player:getRewardChest()
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	RewardChest& rewardChest = player->getRewardChest();
+	if (&rewardChest) {
+		pushUserdata<Item>(L, &rewardChest);
+		setItemMetatable(L, -1, &rewardChest);
+	}
+	else {
 		pushBoolean(L, false);
 	}
 	return 1;

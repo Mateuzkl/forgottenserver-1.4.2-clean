@@ -15,6 +15,7 @@
 #include "movement.h"
 #include "scheduler.h"
 #include "weapons.h"
+#include "rewardchest.h"
 
 #include <fmt/format.h>
 
@@ -831,6 +832,15 @@ DepotLocker* Player::getDepotLocker(uint32_t depotId)
 	it->second->internalAddThing(inbox);
 	it->second->internalAddThing(getDepotChest(depotId, true));
 	return it->second.get();
+}
+
+RewardChest& Player::getRewardChest()
+{
+	if (!rewardChest) {
+		rewardChest = std::make_shared<RewardChest>(ITEM_REWARD_CHEST);
+		RewardChest* rewardChest = new RewardChest(ITEM_REWARD_CHEST);
+	}
+	return *rewardChest;
 }
 
 void Player::sendCancelMessage(ReturnValue message) const
@@ -4629,3 +4639,265 @@ void Player::updateRegeneration()
 		condition->setParam(CONDITION_PARAM_MANATICKS, vocation->getManaGainTicks() * 1000);
 	}
 }
+<<<<<<< HEAD
+=======
+
+void Player::addItemImbuements(Item* item) {
+	if (item->hasImbuements()) {
+		const std::vector<std::shared_ptr<Imbuement>>& imbuementList = item->getImbuements();
+		for (auto& imbue : imbuementList) {
+			if (imbue->isSkill()) {
+				switch (imbue->imbuetype) {
+					case ImbuementType::IMBUEMENT_TYPE_FIST_SKILL:
+						setVarSkill(SKILL_FIST, static_cast<int32_t>(imbue->value));
+						break;
+					case ImbuementType::IMBUEMENT_TYPE_CLUB_SKILL:
+						setVarSkill(SKILL_CLUB, static_cast<int32_t>(imbue->value));
+						break;
+					case ImbuementType::IMBUEMENT_TYPE_SWORD_SKILL:
+						setVarSkill(SKILL_SWORD, static_cast<int32_t>(imbue->value));
+						break;
+					case ImbuementType::IMBUEMENT_TYPE_AXE_SKILL:
+						setVarSkill(SKILL_AXE, static_cast<int32_t>(imbue->value));
+						break;
+					case ImbuementType::IMBUEMENT_TYPE_DISTANCE_SKILL:
+						setVarSkill(SKILL_DISTANCE, static_cast<int32_t>(imbue->value));
+						break;
+					case ImbuementType::IMBUEMENT_TYPE_SHIELD_SKILL:
+						setVarSkill(SKILL_SHIELD, static_cast<int32_t>(imbue->value));
+						break;
+					case ImbuementType::IMBUEMENT_TYPE_FISHING_SKILL:
+						setVarSkill(SKILL_FISHING, static_cast<int32_t>(imbue->value));
+						break;
+					case ImbuementType::IMBUEMENT_TYPE_MAGIC_LEVEL:
+						setVarSkill(SKILL_MAGLEVEL, static_cast<int32_t>(imbue->value));
+						break;
+				}
+			}
+
+			if (imbue->isSpecialSkill()) {
+				switch (imbue->imbuetype) {
+					case ImbuementType::IMBUEMENT_TYPE_MANA_LEECH:
+						setVarSpecialSkill(SPECIALSKILL_MANALEECHAMOUNT, static_cast<int32_t>(imbue->value));
+						break;
+					case ImbuementType::IMBUEMENT_TYPE_LIFE_LEECH:
+						setVarSpecialSkill(SPECIALSKILL_LIFELEECHAMOUNT, static_cast<int32_t>(imbue->value));
+						break;
+					case ImbuementType::IMBUEMENT_TYPE_CRITICAL_CHANCE:
+						setVarSpecialSkill(SPECIALSKILL_CRITICALHITCHANCE, static_cast<int32_t>(imbue->value));
+						break;
+					case ImbuementType::IMBUEMENT_TYPE_CRITICAL_AMOUNT:
+						setVarSpecialSkill(SPECIALSKILL_CRITICALHITAMOUNT, static_cast<int32_t>(imbue->value));
+						break;
+				}
+			}
+
+			if (imbue->isStat()) {
+				switch (imbue->imbuetype) {
+					case ImbuementType::IMBUEMENT_TYPE_CAPACITY_BOOST:
+						capacity += imbue->value;
+						break;
+					case ImbuementType::IMBUEMENT_TYPE_SPEED_BOOST:
+						g_game.changeSpeed(this, static_cast<int32_t>(imbue->value));
+						break;
+				}
+			}
+		}
+	}
+	sendSkills();
+	sendStats();
+}
+
+void Player::removeItemImbuements(Item* item) {
+	if (item->hasImbuements()) {
+		const std::vector<std::shared_ptr<Imbuement>>& imbuementList = item->getImbuements();
+		for (auto& imbue : imbuementList) {
+			if (imbue->isSkill()) {
+				switch (imbue->imbuetype) {
+					case ImbuementType::IMBUEMENT_TYPE_FIST_SKILL:
+						setVarSkill(SKILL_FIST, -static_cast<int32_t>(imbue->value));
+						break;
+					case ImbuementType::IMBUEMENT_TYPE_CLUB_SKILL:
+						setVarSkill(SKILL_CLUB, -static_cast<int32_t>(imbue->value));
+						break;
+					case ImbuementType::IMBUEMENT_TYPE_SWORD_SKILL:
+						setVarSkill(SKILL_SWORD, -static_cast<int32_t>(imbue->value));
+						break;
+					case ImbuementType::IMBUEMENT_TYPE_AXE_SKILL:
+						setVarSkill(SKILL_AXE, -static_cast<int32_t>(imbue->value));
+						break;
+					case ImbuementType::IMBUEMENT_TYPE_DISTANCE_SKILL:
+						setVarSkill(SKILL_DISTANCE, -static_cast<int32_t>(imbue->value));
+						break;
+					case ImbuementType::IMBUEMENT_TYPE_SHIELD_SKILL:
+						setVarSkill(SKILL_SHIELD, -static_cast<int32_t>(imbue->value));
+						break;
+					case ImbuementType::IMBUEMENT_TYPE_FISHING_SKILL:
+						setVarSkill(SKILL_FISHING, -static_cast<int32_t>(imbue->value));
+						break;
+					case ImbuementType::IMBUEMENT_TYPE_MAGIC_LEVEL:
+						setVarSkill(SKILL_MAGLEVEL, -static_cast<int32_t>(imbue->value));
+						break;
+				}
+			}
+
+			if (imbue->isSpecialSkill()) {
+				switch (imbue->imbuetype) {
+					case ImbuementType::IMBUEMENT_TYPE_MANA_LEECH:
+						setVarSpecialSkill(SPECIALSKILL_MANALEECHAMOUNT, -static_cast<int32_t>(imbue->value));
+						break;
+					case ImbuementType::IMBUEMENT_TYPE_LIFE_LEECH:
+						setVarSpecialSkill(SPECIALSKILL_LIFELEECHAMOUNT, -static_cast<int32_t>(imbue->value));
+						break;
+					case ImbuementType::IMBUEMENT_TYPE_CRITICAL_CHANCE:
+						setVarSpecialSkill(SPECIALSKILL_CRITICALHITCHANCE, -static_cast<int32_t>(imbue->value));
+						break;
+					case ImbuementType::IMBUEMENT_TYPE_CRITICAL_AMOUNT:
+						setVarSpecialSkill(SPECIALSKILL_CRITICALHITAMOUNT, -static_cast<int32_t>(imbue->value));
+						break;
+				}
+			}
+
+			if (imbue->isStat()) {
+				switch (imbue->imbuetype) {
+				case ImbuementType::IMBUEMENT_TYPE_CAPACITY_BOOST:
+					capacity -= imbue->value;
+					break;
+				case ImbuementType::IMBUEMENT_TYPE_SPEED_BOOST:
+					g_game.changeSpeed(this, -static_cast<int32_t>(imbue->value));
+					break;
+				}
+			}
+		}
+	}
+	sendSkills();
+	sendStats();
+}
+
+
+void Player::removeImbuementEffect(std::shared_ptr<Imbuement> imbue) {
+
+
+	if (imbue->isSkill()) {
+		switch (imbue->imbuetype) {
+		case ImbuementType::IMBUEMENT_TYPE_FIST_SKILL:
+			setVarSkill(SKILL_FIST, -static_cast<int32_t>(imbue->value));
+			break;
+		case ImbuementType::IMBUEMENT_TYPE_CLUB_SKILL:
+			setVarSkill(SKILL_CLUB, -static_cast<int32_t>(imbue->value));
+			break;
+		case ImbuementType::IMBUEMENT_TYPE_SWORD_SKILL:
+			setVarSkill(SKILL_SWORD, -static_cast<int32_t>(imbue->value));
+			break;
+		case ImbuementType::IMBUEMENT_TYPE_AXE_SKILL:
+			setVarSkill(SKILL_AXE, -static_cast<int32_t>(imbue->value));
+			break;
+		case ImbuementType::IMBUEMENT_TYPE_DISTANCE_SKILL:
+			setVarSkill(SKILL_DISTANCE, -static_cast<int32_t>(imbue->value));
+			break;
+		case ImbuementType::IMBUEMENT_TYPE_SHIELD_SKILL:
+			setVarSkill(SKILL_SHIELD, -static_cast<int32_t>(imbue->value));
+			break;
+		case ImbuementType::IMBUEMENT_TYPE_FISHING_SKILL:
+			setVarSkill(SKILL_FISHING, -static_cast<int32_t>(imbue->value));
+			break;
+		case ImbuementType::IMBUEMENT_TYPE_MAGIC_LEVEL:
+			setVarSkill(SKILL_MAGLEVEL, -static_cast<int32_t>(imbue->value));
+			break;
+		}
+	}
+
+	if (imbue->isSpecialSkill()) {
+		switch (imbue->imbuetype) {
+		case ImbuementType::IMBUEMENT_TYPE_MANA_LEECH:
+			setVarSpecialSkill(SPECIALSKILL_MANALEECHAMOUNT, -static_cast<int32_t>(imbue->value));
+			break;
+		case ImbuementType::IMBUEMENT_TYPE_LIFE_LEECH:
+			setVarSpecialSkill(SPECIALSKILL_LIFELEECHAMOUNT, -static_cast<int32_t>(imbue->value));
+			break;
+		case ImbuementType::IMBUEMENT_TYPE_CRITICAL_CHANCE:
+			setVarSpecialSkill(SPECIALSKILL_CRITICALHITCHANCE, -static_cast<int32_t>(imbue->value));
+			break;
+		case ImbuementType::IMBUEMENT_TYPE_CRITICAL_AMOUNT:
+			setVarSpecialSkill(SPECIALSKILL_CRITICALHITAMOUNT, -static_cast<int32_t>(imbue->value));
+			break;
+		}
+	}
+
+	if (imbue->isStat()) {
+		switch (imbue->imbuetype) {
+		case ImbuementType::IMBUEMENT_TYPE_CAPACITY_BOOST:
+			capacity -= imbue->value;
+			break;
+		case ImbuementType::IMBUEMENT_TYPE_SPEED_BOOST:
+			g_game.changeSpeed(this, -static_cast<int32_t>(imbue->value));
+			break;
+		}
+	}
+	sendSkills();
+	sendStats();
+}
+
+void Player::addImbuementEffect(std::shared_ptr<Imbuement> imbue) {
+
+
+	if (imbue->isSkill()) {
+		switch (imbue->imbuetype) {
+		case ImbuementType::IMBUEMENT_TYPE_FIST_SKILL:
+			setVarSkill(SKILL_FIST, static_cast<int32_t>(imbue->value));
+			break;
+		case ImbuementType::IMBUEMENT_TYPE_CLUB_SKILL:
+			setVarSkill(SKILL_CLUB, static_cast<int32_t>(imbue->value));
+			break;
+		case ImbuementType::IMBUEMENT_TYPE_SWORD_SKILL:
+			setVarSkill(SKILL_SWORD, static_cast<int32_t>(imbue->value));
+			break;
+		case ImbuementType::IMBUEMENT_TYPE_AXE_SKILL:
+			setVarSkill(SKILL_AXE, static_cast<int32_t>(imbue->value));
+			break;
+		case ImbuementType::IMBUEMENT_TYPE_DISTANCE_SKILL:
+			setVarSkill(SKILL_DISTANCE, static_cast<int32_t>(imbue->value));
+			break;
+		case ImbuementType::IMBUEMENT_TYPE_SHIELD_SKILL:
+			setVarSkill(SKILL_SHIELD, static_cast<int32_t>(imbue->value));
+			break;
+		case ImbuementType::IMBUEMENT_TYPE_FISHING_SKILL:
+			setVarSkill(SKILL_FISHING, static_cast<int32_t>(imbue->value));
+			break;
+		case ImbuementType::IMBUEMENT_TYPE_MAGIC_LEVEL:
+			setVarSkill(SKILL_MAGLEVEL, static_cast<int32_t>(imbue->value));
+			break;
+		}
+	}
+
+	if (imbue->isSpecialSkill()) {
+		switch (imbue->imbuetype) {
+		case ImbuementType::IMBUEMENT_TYPE_MANA_LEECH:
+			setVarSpecialSkill(SPECIALSKILL_MANALEECHAMOUNT, static_cast<int32_t>(imbue->value));
+			break;
+		case ImbuementType::IMBUEMENT_TYPE_LIFE_LEECH:
+			setVarSpecialSkill(SPECIALSKILL_LIFELEECHAMOUNT, static_cast<int32_t>(imbue->value));
+			break;
+		case ImbuementType::IMBUEMENT_TYPE_CRITICAL_CHANCE:
+			setVarSpecialSkill(SPECIALSKILL_CRITICALHITCHANCE, static_cast<int32_t>(imbue->value));
+			break;
+		case ImbuementType::IMBUEMENT_TYPE_CRITICAL_AMOUNT:
+			setVarSpecialSkill(SPECIALSKILL_CRITICALHITAMOUNT, static_cast<int32_t>(imbue->value));
+			break;
+		}
+	}
+
+	if (imbue->isStat()) {
+		switch (imbue->imbuetype) {
+		case ImbuementType::IMBUEMENT_TYPE_CAPACITY_BOOST:
+			capacity += imbue->value;
+			break;
+		case ImbuementType::IMBUEMENT_TYPE_SPEED_BOOST:
+			g_game.changeSpeed(this, static_cast<int32_t>(imbue->value));
+			break;
+		}
+	}
+	sendSkills();
+	sendStats();
+}
+>>>>>>> 0da6263... Added Reward Container & Boss System (#14)

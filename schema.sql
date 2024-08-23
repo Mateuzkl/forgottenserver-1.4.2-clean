@@ -226,6 +226,7 @@ CREATE TABLE `houses` (
   `paid` int(10) UNSIGNED NOT NULL DEFAULT 0,
   `warnings` int(11) NOT NULL DEFAULT 0,
   `name` varchar(255) NOT NULL,
+<<<<<<< HEAD
   `rent` int(11) NOT NULL DEFAULT 0,
   `town_id` int(11) NOT NULL DEFAULT 0,
   `bid` int(11) NOT NULL DEFAULT 0,
@@ -611,6 +612,135 @@ INSERT INTO `myaac_gallery` (`id`, `comment`, `image`, `thumb`, `author`, `order
 CREATE TABLE `myaac_menu` (
   `id` int(11) NOT NULL,
   `template` varchar(255) NOT NULL,
+=======
+  `rent` int NOT NULL DEFAULT '0',
+  `town_id` int NOT NULL DEFAULT '0',
+  `bid` int NOT NULL DEFAULT '0',
+  `bid_end` int NOT NULL DEFAULT '0',
+  `last_bid` int NOT NULL DEFAULT '0',
+  `highest_bidder` int NOT NULL DEFAULT '0',
+  `size` int NOT NULL DEFAULT '0',
+  `beds` int NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `owner` (`owner`),
+  KEY `town_id` (`town_id`)
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+
+CREATE TABLE IF NOT EXISTS `house_lists` (
+  `house_id` int NOT NULL,
+  `listid` int NOT NULL,
+  `list` text NOT NULL,
+  FOREIGN KEY (`house_id`) REFERENCES `houses` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+
+CREATE TABLE IF NOT EXISTS `market_history` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `player_id` int NOT NULL,
+  `sale` tinyint NOT NULL DEFAULT '0',
+  `itemtype` smallint unsigned NOT NULL,
+  `amount` smallint unsigned NOT NULL,
+  `price` int unsigned NOT NULL DEFAULT '0',
+  `expires_at` bigint unsigned NOT NULL,
+  `inserted` bigint unsigned NOT NULL,
+  `state` tinyint unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `player_id` (`player_id`, `sale`),
+  FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+
+CREATE TABLE IF NOT EXISTS `market_offers` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `player_id` int NOT NULL,
+  `sale` tinyint NOT NULL DEFAULT '0',
+  `itemtype` smallint unsigned NOT NULL,
+  `amount` smallint unsigned NOT NULL,
+  `created` bigint unsigned NOT NULL,
+  `anonymous` tinyint NOT NULL DEFAULT '0',
+  `price` int unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `sale` (`sale`,`itemtype`),
+  KEY `created` (`created`),
+  FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+
+CREATE TABLE IF NOT EXISTS `players_online` (
+  `player_id` int NOT NULL,
+  PRIMARY KEY (`player_id`)
+) ENGINE=MEMORY DEFAULT CHARACTER SET=utf8;
+
+CREATE TABLE IF NOT EXISTS `player_deaths` (
+  `player_id` int NOT NULL,
+  `time` bigint unsigned NOT NULL DEFAULT '0',
+  `level` int NOT NULL DEFAULT '1',
+  `killed_by` varchar(255) NOT NULL,
+  `is_player` tinyint NOT NULL DEFAULT '1',
+  `mostdamage_by` varchar(100) NOT NULL,
+  `mostdamage_is_player` tinyint NOT NULL DEFAULT '0',
+  `unjustified` tinyint NOT NULL DEFAULT '0',
+  `mostdamage_unjustified` tinyint NOT NULL DEFAULT '0',
+  FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE,
+  KEY `killed_by` (`killed_by`),
+  KEY `mostdamage_by` (`mostdamage_by`)
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+
+CREATE TABLE IF NOT EXISTS `player_depotitems` (
+  `player_id` int NOT NULL,
+  `sid` int NOT NULL COMMENT 'any given range eg 0-100 will be reserved for depot lockers and all > 100 will be then normal items inside depots',
+  `pid` int NOT NULL DEFAULT '0',
+  `itemtype` smallint unsigned NOT NULL,
+  `count` smallint NOT NULL DEFAULT '0',
+  `attributes` blob NOT NULL,
+  UNIQUE KEY `player_id_2` (`player_id`, `sid`),
+  FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+
+CREATE TABLE IF NOT EXISTS `player_rewarditems` (
+  `player_id` int NOT NULL,
+  `sid` int NOT NULL COMMENT 'range 0-100 will be reserved for adding items to player who are offline and all > 100 is for items saved from reward chest',
+  `pid` int NOT NULL DEFAULT '0',
+  `itemtype` smallint unsigned NOT NULL,
+  `count` smallint NOT NULL DEFAULT '0',
+  `attributes` blob NOT NULL,
+  UNIQUE KEY `player_id_2` (`player_id`, `sid`),
+  FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+
+CREATE TABLE IF NOT EXISTS `player_inboxitems` (
+  `player_id` int NOT NULL,
+  `sid` int NOT NULL,
+  `pid` int NOT NULL DEFAULT '0',
+  `itemtype` smallint unsigned NOT NULL,
+  `count` smallint NOT NULL DEFAULT '0',
+  `attributes` blob NOT NULL,
+  UNIQUE KEY `player_id_2` (`player_id`, `sid`),
+  FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+
+CREATE TABLE IF NOT EXISTS `player_storeinboxitems` (
+  `player_id` int NOT NULL,
+  `sid` int NOT NULL,
+  `pid` int NOT NULL DEFAULT '0',
+  `itemtype` smallint unsigned NOT NULL,
+  `count` smallint NOT NULL DEFAULT '0',
+  `attributes` blob NOT NULL,
+  UNIQUE KEY `player_id_2` (`player_id`, `sid`),
+  FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+
+CREATE TABLE IF NOT EXISTS `player_items` (
+  `player_id` int NOT NULL DEFAULT '0',
+  `pid` int NOT NULL DEFAULT '0',
+  `sid` int NOT NULL DEFAULT '0',
+  `itemtype` smallint unsigned NOT NULL DEFAULT '0',
+  `count` smallint NOT NULL DEFAULT '0',
+  `attributes` blob NOT NULL,
+  FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE,
+  KEY `sid` (`sid`)
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+
+CREATE TABLE IF NOT EXISTS `player_spells` (
+  `player_id` int NOT NULL,
+>>>>>>> 0da6263... Added Reward Container & Boss System (#14)
   `name` varchar(255) NOT NULL,
   `link` varchar(255) NOT NULL,
   `blank` tinyint(1) NOT NULL DEFAULT 0,
