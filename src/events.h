@@ -6,6 +6,7 @@
 
 #include "luascript.h"
 #include "const.h"
+#include "creature.h"
 
 class Party;
 class ItemType;

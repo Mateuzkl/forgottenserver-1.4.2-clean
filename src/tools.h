@@ -1,10 +1,9 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
-// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
-
 #ifndef FS_TOOLS_H_5F9A9742DA194628830AA1C64909AE43
 #define FS_TOOLS_H_5F9A9742DA194628830AA1C64909AE43
 
 #include <random>
+#include <type_traits>
+#include <fmt/core.h>
 
 #include "position.h"
 #include "const.h"
@@ -80,9 +79,9 @@ int64_t OTSYS_TIME();
 
 SpellGroup_t stringToSpellGroup(const std::string& value);
 
-template < typename E >
+template <typename E>
 auto format_as(E e) {
-	return fmt::underlying(e);
+    return static_cast<std::underlying_type_t<E>>(e);
 }
 
 #endif
