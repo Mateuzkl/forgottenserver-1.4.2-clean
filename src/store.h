@@ -137,51 +137,53 @@ class StoreCategory : public StoreEntry {
 typedef StoreEntry SubOffer;
 
 class StoreOffer : public StoreEntry {
-	public:
-		StoreOffer(uint32_t _id) {
-			id = _id;
-			offerState = STORE_OFFERSTATE_NONE;
-			price = 0;
-			scriptInterface = nullptr;
-			renderEvent = -1;
-			buyEvent = -1;
-		}
+public:
+    StoreOffer(uint32_t _id) {
+        id = _id;
+        offerState = STORE_OFFERSTATE_NONE;
+        price = 0;
+        count = 1;
+        scriptInterface = nullptr;
+        renderEvent = -1;
+        buyEvent = -1;
+    }
 
-		uint32_t getId() const {
-			return id;
-		}
+    uint32_t getId() const {
+        return id;
+    }
 
-		StoreOfferState_t getOfferState() const {
-			return offerState;
-		}
+    StoreOfferState_t getOfferState() const {
+        return offerState;
+    }
 
-		uint32_t getPrice() const {
-			return price;
-		}
+    uint32_t getPrice() const {
+        return price;
+    }
 
-		std::vector<SubOffer>& getSubOffers() {
-			return subOffers;
-		}
+    std::vector<SubOffer>& getSubOffers() {
+        return subOffers;
+    }
 
-		const std::string& getMessage() const {
-			return message;
-		}
+    const std::string& getMessage() const {
+        return message;
+    }
 
-	protected:
-		uint32_t id;
-		StoreOfferState_t offerState;
-		uint32_t price;
-		std::string message; //on purchase message
+protected:
+    uint32_t id;
+    StoreOfferState_t offerState;
+    uint32_t price;
+    uint32_t count;
+    std::string message;
 
-		std::vector<SubOffer> subOffers; //bundled offers
+    std::vector<SubOffer> subOffers;
 
-		LuaScriptInterface* scriptInterface;
+    LuaScriptInterface* scriptInterface;
 
-		int32_t renderEvent;
-		int32_t buyEvent;
+    int32_t renderEvent;
+    int32_t buyEvent;
 
-		friend class Store;
-		friend class LuaScriptInterface;
+    friend class Store;
+    friend class LuaScriptInterface;
 };
 
 #endif
