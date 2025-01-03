@@ -5007,49 +5007,91 @@ void Game::playerDebugAssert(uint32_t playerId, const std::string& assertLine, c
 }
 
 void Game::playerPurchaseStoreOffer(uint32_t playerId, uint32_t offerId, const std::string& param) {
-	Player* player = getPlayerByID(playerId);
-	if (!player) {
-		return;
-	}
+    Player* player = getPlayerByID(playerId);
+    if (!player) {
+        return;
+    }
 
-	auto offer = g_store->getOfferById(offerId); if (!offer) {
-		player->sendStoreError(STORE_ERROR_PURCHASE, "Offer not found. Please reopen the store and try again.");
-		return;
-	}
+    auto offer = g_store->getOfferById(offerId);
+    if (!offer) {
+        player->sendStoreError(STORE_ERROR_PURCHASE, "Offer not found. Please reopen the store and try again.");
+        return;
+    }
 
-	auto coinBalance = IOAccount::getCoinBalance(player->getAccount());
-	if (coinBalance >= offer->getPrice()) {
-		if (g_store->executeOnBuy(player, &(*offer), param)) {
-			IOAccount::addCoins(player->getAccount(), -static_cast<int32_t>(offer->getPrice()));
-			player->coinBalance -= offer->getPrice();
-			player->sendStorePurchaseCompleted(offer->getMessage());
-			player->sendTextMessage(MESSAGE_EVENT_ADVANCE, "A transaction was successful. For more details, please check your Store Coins history.");
+    // Defining the minimum and maximum length
+    const int minNameLength = 4;
+    const int maxNameLength = 20;
 
-			std::string transactionDescription;
-			if (offer->getSubOffers().size() == 0) {
-				transactionDescription = offer->getName();
-			}
-			else {
-				std::ostringstream tmpDesc;
-				bool first = true;
-				for (const auto& subOffer : offer->getSubOffers()) {
-					if (!first) {
-						tmpDesc << ", ";
-					}
-					else {
-						first = false;
-					}
-					tmpDesc << subOffer.getName();
-				}
-				transactionDescription = tmpDesc.str();
-			}
+    if (param.length() < minNameLength || param.length() > maxNameLength) {
+        player->sendStoreError(STORE_ERROR_PURCHASE, "Invalid name length. Name must be between " + std::to_string(minNameLength) + " and " + std::to_string(maxNameLength) + " characters.");
+        return;
+    }
 
-			g_store->onTransactionCompleted(player->getAccount(), -static_cast<int32_t>(offer->getPrice()), transactionDescription);
-		}
-	}
-	else {
-		player->sendStoreError(STORE_ERROR_PURCHASE, "You do not have enough coins to complete this purchase.");
-	}
+    auto coinBalance = IOAccount::getCoinBalance(player->getAccount());
+    if (coinBalance >= offer->getPrice()) {
+        if (g_store->executeOnBuy(player, &(*offer), param)) {
+            // Checks if it's a name change offer
+            if (offer->getName() == "Name Change") {
+                static const std::unordered_set<std::string> blockedNames = {
+                    "admin", "god", "cm", "gm", "tutor", "support", "staff",
+                    "CM", "GM", "GOD", "GAME MASTER", "GAMEMASTER", "HOSTER", "RACIST",
+                    "Tutor", "Admin", "Owner", "Developer", "Support", "Moderator",
+                    "accountmanager", "gamemaster", "comunitymanager"
+                };
+
+                if (blockedNames.find(param) != blockedNames.end()) {
+                    player->sendStoreError(STORE_ERROR_PURCHASE, "This name is not allowed.");
+                    player->sendTextMessage(MESSAGE_EVENT_ADVANCE, "You have chosen a prohibited name. You will be logged out in 3 seconds.");
+
+                    // Kicks the player in 3 seconds
+                    g_scheduler.addEvent(createSchedulerTask(3000, [playerId]() {
+                        Player* playerToKick = g_game.getPlayerByID(playerId);
+                        if (playerToKick) {
+                            playerToKick->kickPlayer(true);
+                        }
+                    }));
+
+                    return;
+                }
+
+                player->sendTextMessage(MESSAGE_EVENT_ADVANCE, "Your name has been changed successfully. You will be logged out in 3 seconds.");
+
+                g_scheduler.addEvent(createSchedulerTask(3000, [playerId]() {
+                    Player* playerToKick = g_game.getPlayerByID(playerId);
+                    if (playerToKick) {
+                        playerToKick->kickPlayer(true);
+                    }
+                }));
+            } else {
+                player->sendTextMessage(MESSAGE_EVENT_ADVANCE, "Your purchase was successful.");
+            }
+
+            IOAccount::addCoins(player->getAccount(), -static_cast<int32_t>(offer->getPrice()));
+            player->coinBalance -= offer->getPrice();
+            player->sendStorePurchaseCompleted(offer->getMessage());
+
+            std::string transactionDescription;
+            if (offer->getSubOffers().size() == 0) {
+                transactionDescription = offer->getName();
+            } else {
+                std::ostringstream tmpDesc;
+                bool first = true;
+                for (const auto& subOffer : offer->getSubOffers()) {
+                    if (!first) {
+                        tmpDesc << ", ";
+                    } else {
+                        first = false;
+                    }
+                    tmpDesc << subOffer.getName();
+                }
+                transactionDescription = tmpDesc.str();
+            }
+
+            g_store->onTransactionCompleted(player->getAccount(), -static_cast<int32_t>(offer->getPrice()), transactionDescription);
+        }
+    } else {
+        player->sendStoreError(STORE_ERROR_PURCHASE, "You do not have enough coins to complete this purchase.");
+    }
 }
 
 void Game::playerTransferCoins(uint32_t playerId, const std::string& recipient, uint16_t amount) {
