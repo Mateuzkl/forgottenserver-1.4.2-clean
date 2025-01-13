@@ -5018,45 +5018,52 @@ void Game::playerPurchaseStoreOffer(uint32_t playerId, uint32_t offerId, const s
         return;
     }
 
-    // Validation only for "Name Change" offer
+    // Validation for "Name Change" offer
     if (offer->getName() == "Name Change") {
         const int minNameLength = 4;
         const int maxNameLength = 20;
 
-        // Check if name length is between 4 and 20 characters
+        // Check if the name length is within the required range
         if (param.length() < minNameLength || param.length() > maxNameLength) {
-            player->sendStoreError(STORE_ERROR_PURCHASE, "Invalid name length. Name must be between " + std::to_string(minNameLength) + " and " + std::to_string(maxNameLength) + " characters.");
+            player->sendStoreError(STORE_ERROR_PURCHASE, "Invalid name length. Name must be between 4 and 20 characters.");
+            return;
+        }
+
+        // Check if the name contains invalid characters
+        for (char c : param) {
+            if (!std::isalpha(c) && c != ' ') { // Only letters and spaces are allowed
+                player->sendStoreError(STORE_ERROR_PURCHASE, "Invalid name. Only letters and spaces are allowed.");
+                return;
+            }
+        }
+
+        // Check if the name starts or ends with a space
+        if (param.front() == ' ' || param.back() == ' ') {
+            player->sendStoreError(STORE_ERROR_PURCHASE, "Invalid name. No spaces are allowed at the beginning or end.");
             return;
         }
 
         // List of prohibited names
         static const std::unordered_set<std::string> blockedNames = {
             "admin", "god", "cm", "gm", "tutor", "support", "staff",
-            "CM", "GM", "GOD", "GAME MASTER", "GAMEMASTER", "HOSTER", "RACIST",
-            "Tutor", "Admin", "Owner", "Developer", "Support", "Moderator",
+            "cm", "gm", "god", "game master", "gamemaster", "hoster", "racist",
+            "tutor", "admin", "owner", "developer", "support", "moderator",
             "accountmanager", "gamemaster", "comunitymanager"
         };
 
+        // Convert the name to lowercase for comparison
+        std::string lowercaseName = param;
+        std::transform(lowercaseName.begin(), lowercaseName.end(), lowercaseName.begin(), ::tolower);
+
         // Check if the name is in the blocked list
-        if (blockedNames.find(param) != blockedNames.end()) {
+        if (blockedNames.find(lowercaseName) != blockedNames.end()) {
             player->sendStoreError(STORE_ERROR_PURCHASE, "This name is not allowed.");
-            player->sendTextMessage(MESSAGE_EVENT_ADVANCE, "You have chosen a prohibited name. You will be logged out in 3 seconds.");
-
-            // Kick the player in 3 seconds
-            g_scheduler.addEvent(createSchedulerTask(3000, [playerId]() {
-                Player* playerToKick = g_game.getPlayerByID(playerId);
-                if (playerToKick) {
-                    playerToKick->kickPlayer(true);
-                }
-            }));
-
             return;
         }
 
-        // Success message for name change
         player->sendTextMessage(MESSAGE_EVENT_ADVANCE, "Your name has been changed successfully. You will be logged out in 3 seconds.");
 
-        // Kick the player after 3 seconds to apply changes
+        // Log out the player after 3 seconds
         g_scheduler.addEvent(createSchedulerTask(3000, [playerId]() {
             Player* playerToKick = g_game.getPlayerByID(playerId);
             if (playerToKick) {

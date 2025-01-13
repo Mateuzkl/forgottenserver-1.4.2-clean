@@ -26,12 +26,69 @@
     <!-- Category: Mounts -->
     <category name="Mounts" icons="Category_Mounts.png" description="Buy your character one or more of the fabulous Mounts offered here.">
         <offer name="Flying Divan" price="900" icons="Flying_Divan.png" description="Here you can purchase the Mount &quot;Flying Divan&quot; for your character. Riding on a mount is not only cool, but also gives your character a speed boost.&#10;Note: The Mount will only be received by the character who purchased it in the Store." message="Thank you for your purchase! Your mount is now available.&#10;Enjoy the ride!" script="mounts.lua" />
-        <offer name="Cooper Fly" price="660" icons="Copper_Fly.png" description="Here you can purchase the Mount &quot;Copper Fly&quot; for your character. Riding on a mount is not only cool, but also gives your character a speed boost.&#10;Note: The Mount will only be received by the character who purchased it in the Store." message="Thank you for your purchase! Your mount is now available.&#10;Enjoy the ride!" script="mounts.lua" />
+        <offer name="Copper Fly" price="660" icons="Copper_Fly.png" description="Here you can purchase the Mount &quot;Copper Fly&quot; for your character. Riding on a mount is not only cool, but also gives your character a speed boost.&#10;Note: The Mount will only be received by the character who purchased it in the Store." message="Thank you for your purchase! Your mount is now available.&#10;Enjoy the ride!" script="mounts.lua" />
+
+        <!-- Draptor Mount -->
+        <offer name="Desert King" price="800" icons="Draptor_Mount.png" description="Here you can purchase the Mount &quot;Draptor&quot; for your character. Riding on a mount is not only cool, but also gives your character a speed boost.&#10;Note: The Mount will only be received by the character who purchased it in the Store." message="Thank you for your purchase! Your mount is now available.&#10;Enjoy the ride!" script="mounts.lua" />
+
+        <!-- Vortexion Mount -->
+        <offer name="Widow Queen" price="1000" icons="Vortexion_Mount.png" description="Here you can purchase the Mount &quot;Vortexion&quot; for your character. Riding on a mount is not only cool, but also gives your character a speed boost.&#10;Note: The Mount will only be received by the character who purchased it in the Store." message="Thank you for your purchase! Your mount is now available.&#10;Enjoy the ride!" script="mounts.lua" />
+   
+    <!-- Racing Bird Mount -->
+    <offer name="Racing Bird" price="1200" icons="Racing_Bird.png" description="Equip your character with the fast and stylish &quot;Racing Bird&quot; mount!&#10;By purchasing this, your character will receive the Racing Bird mount and enjoy faster travel speeds.&#10;Note: The Mount will only be received by the character who purchased it in the Store."
+           message="Thank you for your purchase! Your Racing Bird mount is now available.&#10;Enjoy the ride!"
+           script="mounts.lua" />
     </category>
 
-    <!-- Category: Outfits -->
+        <!-- Category: Outfits -->
     <category name="Outfits" icons="Category_Outfits.png" description="Buy your character one or more of the classy Outfits offered here.">
-        <offer name="Full Puppeteer Outfit" price="1" icons="Outfit_Puppeteer_Male_Addon_3.png;Outfit_Puppeteer_Female_Addon_3.png" description="Give your character a new look by getting it a new Outfit.&#10;Here you can purchase the Full Outfit &quot;Puppeteer&quot; - therefore your character will receive the Basic Outfit + 2 Addons at a reduced package price.&#10;Note: The Outfit will only be received by the character who purchased it in the Store." message="Thank you for your purchase! Your new outfit is now available.&#10;Show off the latest fashion!" script="outfits.lua" />
+        <!-- Full Puppeteer Outfit -->
+        <offer name="Full Puppeteer Outfit" price="1" icons="Outfit_Puppeteer_Male_Addon_3.png;Outfit_Puppeteer_Female_Addon_3.png"
+            description="Give your character a new look by getting it a new Outfit.&#10;Here you can purchase the Full Outfit &quot;Puppeteer&quot; - therefore your character will receive the Basic Outfit + 2 Addons at a reduced package price.&#10;Note: The Outfit will only be received by the character who purchased it in the Store."
+            message="Thank you for your purchase! Your new outfit is now available.&#10;Show off the latest fashion!"
+            script="outfits.lua" />
+        
+        <!-- Full Ranger Outfit -->
+        <offer name="Full Ranger Outfit" price="2" icons="Outfit_Ranger_Male_Addon_3.png;Outfit_Ranger_Female_Addon_3.png"
+            description="Equip your character with the stylish &quot;Ranger&quot; Outfit!&#10;By purchasing this, your character will receive the Basic Outfit along with both Addons at a special price.&#10;Note: The Outfit will only be received by the character who purchased it in the Store."
+            message="Thank you for your purchase! Your new outfit is now available.&#10;Show off your new look!"
+            script="outfits.lua" />
+
+        <!-- Full Evoker Outfit -->
+        <offer name="Full Evoker Outfit" price="3" icons="Outfit_Evoker_Male_Addon_3.png;Outfit_Evoker_Female_Addon_3.png"
+            description="Equip your character with the powerful &quot;Evoker&quot; Outfit!&#10;By purchasing this, your character will receive the Basic Outfit along with both Addons at a special price.&#10;Note: The Outfit will only be received by the character who purchased it in the Store."
+            message="Thank you for your purchase! Your new outfit is now available.&#10;Embrace the power of the Evoker!"
+            script="outfits.lua" />
+
+        <!-- Full Hunter Outfit -->
+        <offer name="Full Hunter Outfit" price="2" icons="Outfit_Hunter_Male_Addon_3.png;Outfit_Hunter_Female_Addon_3.png"
+            description="Equip your character with the rugged &quot;Hunter&quot; Outfit!&#10;By purchasing this, your character will receive the Basic Outfit along with both Addons at a special price.&#10;Note: The Outfit will only be received by the character who purchased it in the Store."
+            message="Thank you for your purchase! Your new outfit is now available.&#10;Hunt in style!"
+            script="outfits.lua" />
+        
+        <!-- Full Mage Outfit -->
+        <offer name="Full Mage Outfit" price="3" icons="Outfit_Mage_Male_Addon_3.png;Outfit_Mage_Female_Addon_3.png"
+            description="Equip your character with the mystical &quot;Mage&quot; Outfit!&#10;By purchasing this, your character will receive the Basic Outfit along with both Addons at a special price.&#10;Note: The Outfit will only be received by the character who purchased it in the Store."
+            message="Thank you for your purchase! Your new outfit is now available.&#10;Unleash your magical powers!"
+            script="outfits.lua" />
+        
+        <!-- Full Sea Dog Outfit -->
+        <offer name="Full Sea Dog Outfit" price="3" icons="Outfit_SeaDog_Male_Addon_3.png;Outfit_SeaDog_Female_Addon_3.png"
+            description="Equip your character with the adventurous &quot;Sea Dog&quot; Outfit!&#10;By purchasing this, your character will receive the Basic Outfit along with both Addons at a special price.&#10;Note: The Outfit will only be received by the character who purchased it in the Store."
+            message="Thank you for your purchase! Your new outfit is now available.&#10;Set sail and conquer the seas!"
+            script="outfits.lua" />
+
+        <!-- Full Royal Pumpkin Outfit -->
+        <offer name="Full Royal Pumpkin Outfit" price="3" icons="Outfit_Royal_Pumpkin_Male_Addon_3.png;Outfit_Royal_Pumpkin_Female_Addon_3.png"
+            description="Celebrate in style with the &quot;Royal Pumpkin&quot; Outfit!&#10;By purchasing this, your character will receive the Basic Outfit along with both Addons at a special price.&#10;Note: The Outfit will only be received by the character who purchased it in the Store."
+            message="Thank you for your purchase! Your new outfit is now available.&#10;Celebrate with style!"
+            script="outfits.lua" />
+        
+        <!-- Full Citizen Outfit -->
+        <offer name="Full Citizen Outfit" price="2" icons="Outfit_Citizen_Male_Addon_3.png;Outfit_Citizen_Female_Addon_3.png"
+            description="Equip your character with the classic &quot;Citizen&quot; Outfit!&#10;By purchasing this, your character will receive the Basic Outfit along with both Addons at a special price.&#10;Note: The Outfit will only be received by the character who purchased it in the Store."
+            message="Thank you for your purchase! Your new outfit is now available.&#10;The Citizen is the foundation of any civilization!"
+            script="outfits.lua" />
     </category>
 	
     <!-- Category: Auras -->
