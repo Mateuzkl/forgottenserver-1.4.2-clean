@@ -35,7 +35,6 @@ replaceKickOnLogin = true
 maxPacketsPerSecond = 25
 
 -- Store configuration
-storeImagesUrl = "http://otserv.info/images/store/"
 storeCoinsPacketSize = 25
 
 -- Deaths

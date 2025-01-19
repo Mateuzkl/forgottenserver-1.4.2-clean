@@ -74,7 +74,6 @@ class ConfigManager
 			MYSQL_SOCK,
 			DEFAULT_PRIORITY,
 			MAP_AUTHOR,
-			STORE_IMAGES_URL,
 			CONFIG_FILE,
 
 			LAST_STRING_CONFIG /* this must be the last one */

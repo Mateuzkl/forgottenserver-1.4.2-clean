@@ -26,16 +26,13 @@ local function playerHasShader(player, shaderID)
 end
 
 function onRenderShader(player, offer)
-    print("onRender called for offer:", offer:getName())
     local shaderID = getShaderID(offer:getName())
 
     if not shaderID then
-        print('Shader ID for "' .. offer:getName() .. '" was not found.')
         return false, 'Shader ID for "' .. offer:getName() .. '" was not found. Please contact the administrator.'
     end
 
     if playerHasShader(player, shaderID) then
-        print("Player already has this shader.")
         player:sendTextMessage(MESSAGE_EVENT_ADVANCE, 'You already have the shader "' .. offer:getName() .. '".')
         return false, "You already have this shader!"
     end
@@ -44,23 +41,19 @@ function onRenderShader(player, offer)
 end
 
 function onBuyShader(player, offer)
-    print("onBuy called for offer:", offer:getName())
     local shaderID = getShaderID(offer:getName())
 
     if not shaderID then
-        print('Shader ID for "' .. offer:getName() .. '" was not found.')
         return false, 'Shader ID for "' .. offer:getName() .. '" was not found. Please contact the administrator.'
     end
 
     if playerHasShader(player, shaderID) then
-        print("Player already has this shader.")
         player:sendTextMessage(MESSAGE_EVENT_ADVANCE, 'You already have the shader "' .. offer:getName() .. '".')
         return false, "You already have this shader!"
     end
 
     player:addShader(shaderID)
     player:setStorageValue(shaderID, 1) -- Update storage to indicate the player has this shader
-    print("Added shader to player:", shaderID)
     player:sendTextMessage(MESSAGE_INFO_DESCR, 'You have received the ' .. offer:getName() .. ' shader!')
 
     -- Simplified success message

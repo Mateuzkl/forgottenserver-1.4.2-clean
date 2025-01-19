@@ -30,16 +30,13 @@ local function playerHasAura(player, auraID)
 end
 
 function onRender(player, offer)
-    print("onRender called for offer:", offer:getName())
     local auraID = getAuraID(offer:getName())
 
     if not auraID then
-        print('Aura ID for "' .. offer:getName() .. '" was not found.')
         return false, 'Aura ID for "' .. offer:getName() .. '" was not found. Please contact the administrator.'
     end
 
     if playerHasAura(player, auraID) then
-        print("Player already has this aura.")
         player:sendTextMessage(MESSAGE_EVENT_ADVANCE, 'You already have the aura "' .. offer:getName() .. '".')
         return false, "You already have this aura!"
     end
@@ -48,23 +45,19 @@ function onRender(player, offer)
 end
 
 function onBuy(player, offer)
-    print("onBuy called for offer:", offer:getName())
     local auraID = getAuraID(offer:getName())
 
     if not auraID then
-        print('Aura ID for "' .. offer:getName() .. '" was not found.')
         return false, 'Aura ID for "' .. offer:getName() .. '" was not found. Please contact the administrator.'
     end
 
     if playerHasAura(player, auraID) then
-        print("Player already has this aura.")
         player:sendTextMessage(MESSAGE_EVENT_ADVANCE, 'You already have the aura "' .. offer:getName() .. '".')
         return false, "You already have this aura!"
     end
 
     player:addAura(auraID)
     player:setStorageValue(auraID, 1) -- Update storage to indicate the player has this aura
-    print("Added aura to player:", auraID)
     player:sendTextMessage(MESSAGE_INFO_DESCR, 'You have received the ' .. offer:getName() .. ' aura!')
 
     -- Simplified success message

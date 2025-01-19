@@ -2779,7 +2779,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	msg.addByte(0x00); // can change pvp framing option
 	msg.addByte(0x00); // expert mode button enabled
 
-	msg.addString(g_config.getString(ConfigManager::STORE_IMAGES_URL)); // URL (string) to ingame store images
+	msg.add<uint16_t>(player->getClientIcons());
 	msg.add<uint16_t>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::STORE_COINS_PACKET_SIZE))); // premium coin package size
 
 	writeToOutputBuffer(msg);

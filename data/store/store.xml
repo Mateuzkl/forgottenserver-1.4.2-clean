@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <store>
   <!-- Categoria: Items -->
-    <category name="Items" state="1" icons="Item_SolarAxe.png" description="Buy items">
-     <offer name="Solar Axe" state="1" count="2" price="100" icons="Item_SolarAxe.png" description="It's orange. What else could you ask for?" message="Thank you for buying this item." script="items.lua" />
-      <offer name="ham" state="1" count="100" price="100" icons="Item_SolarAxe.png" description="It's orange. What else could you ask for?" message="Thank you for buying this item." script="items.lua" />
-        <offer name="Thunder Hammer" price="100" icons="Item_thunderhammer.png" description="Just pretend you're Thor." message="Thank you for buying this item." script="items.lua" />
+    <category name="Items" state="1" icons="Axe_Item_SolarAxe.png" description="Buy items">
+     <offer name="Solar Axe" state="1" count="2" price="100" icons="Axe_Item_SolarAxe.png" description="It's orange. What else could you ask for?" message="Thank you for buying this item." script="items.lua" />
+      <offer name="ham" state="1" count="100" price="100" icons="Axe_Item_SolarAxe.png" description="It's orange. What else could you ask for?" message="Thank you for buying this item." script="items.lua" />
+        <offer name="Thunder Hammer" price="100" icons="Axe_Item_SolarAxe.png" description="Just pretend you're Thor." message="Thank you for buying this item." script="items.lua" />
     </category>
 
     <!-- Category: Premium Time -->
@@ -91,21 +91,23 @@
             script="outfits.lua" />
     </category>
 	
-    <!-- Category: Auras -->
+  <!-- Category: Auras -->
     <category name="Auras" icons="Category_Outfits.png" description="Buy your character one or more of the classy Auras offered here.">
-        <offer name="Blue Aura" auraID="1" price="1" icons="Outfit_Puppeteer_Male_Addon_3.png;Outfit_Puppeteer_Female_Addon_3.png" description="Give your character a new look by getting it a new Aura." message="Thank you for your purchase! Your new aura is now available." script="auras.lua" />
-        <offer name="Dark Aura" auraID="2" price="1" icons="Outfit_Puppeteer_Male_Addon_3.png;Outfit_Puppeteer_Female_Addon_3.png" description="Give your character a new look by getting it a new Aura." message="Thank you for your purchase! Your new aura is now available." script="auras.lua" />
-        <offer name="War Bear" auraID="3" price="1" icons="Outfit_Puppeteer_Male_Addon_3.png;Outfit_Puppeteer_Female_Addon_3.png" description="Give your character a new look by getting it a new Aura." message="Thank you for your purchase! Your new aura is now available." script="auras.lua" />
-        <!-- Add more offers as needed -->
-    </category>
+    <offer name="Blue Aura" auraID="1" price="1" icons="aura_blue.png" description="Give your character a new look by getting it a new Aura." message="Thank you for your purchase! Your new aura is now available." script="auras.lua" />
+    <offer name="Red Aura" auraID="2" price="1" icons="aura_red.png" description="Give your character a new look by getting it a new Aura." message="Thank you for your purchase! Your new aura is now available." script="auras.lua" />
+    <offer name="Ballon Aura" auraID="3" price="1" icons="aura_ballon.png" description="Give your character a new look by getting it a new Aura." message="Thank you for your purchase! Your new aura is now available." script="auras.lua" />
+    <!-- Add more offers as needed -->
+</category>
 
-    <!-- Category: Wings -->
+
+   <!-- Category: Wings -->
     <category name="Wings" icons="Category_Outfits.png" description="Buy your character one or more of the classy Wings offered here.">
-        <offer name="wing1" Wingid="1" price="1" icons="Outfit_Puppeteer_Male_Addon_3.png;Outfit_Puppeteer_Female_Addon_3.png" description="Give your character a new look by getting it a new Wing." message="Thank you for your purchase! Your new wing is now available." script="wings.lua" />
-        <offer name="wing2" Wingid="2" price="1" icons="Outfit_Puppeteer_Male_Addon_3.png;Outfit_Puppeteer_Female_Addon_3.png" description="Give your character a new look by getting it a new Wing." message="Thank you for your purchase! Your new wing is now available." script="wings.lua" />
-        <offer name="wing3" Wingid="3" price="1" icons="Outfit_Puppeteer_Male_Addon_3.png;Outfit_Puppeteer_Female_Addon_3.png" description="Give your character a new look by getting it a new Wing." message="Thank you for your purchase! Your new wing is now available." script="wings.lua" />
-        <!-- Add more offers as needed -->
-    </category>
+    <offer name="wing1" Wingid="1" price="1" icons="wing_red.png" description="Give your character a new look by getting it a new Wing." message="Thank you for your purchase! Your new wing is now available." script="wings.lua" />
+    <offer name="wing2" Wingid="2" price="1" icons="wing_blue.png" description="Give your character a new look by getting it a new Wing." message="Thank you for your purchase! Your new wing is now available." script="wings.lua" />
+    <offer name="wing3" Wingid="3" price="1" icons="wing_yellow.png" description="Give your character a new look by getting it a new Wing." message="Thank you for your purchase! Your new wing is now available." script="wings.lua" />
+    <!-- Add more offers as needed -->
+</category>
+
 
     <!-- Category: Shaders -->
     <category name="Shaders" icons="Category_Outfits.png" description="Buy your character one or more of the classy Shaders offered here.">
