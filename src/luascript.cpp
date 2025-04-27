@@ -1923,6 +1923,18 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(MONSTERS_EVENT_MOVE)
 	registerEnum(MONSTERS_EVENT_SAY)
 
+	registerEnum(BUFF_NONE)
+    registerEnum(BUFF_EXAMPLE)
+    registerEnum(BUFF_UTANI_HUR)
+    registerEnum(BUFF_EXURA)
+    registerEnum(BUFF_UTANI_GRAN_HUR)
+    registerEnum(BUFF_UTAMO_VITA)
+    registerEnum(BUFF_UTITO_TEMPO)
+    registerEnum(BUFF_UTITO_TEMPO_SAN)
+    registerEnum(BUFF_EXURA_GRAN)
+    registerEnum(BUFF_EXURA_VITA)
+    registerEnum(BUFF_LAST)
+
 	// _G
 	registerGlobalVariable("INDEX_WHEREEVER", INDEX_WHEREEVER);
 	registerGlobalBoolean("VIRTUAL_PARENT", true);
@@ -2059,6 +2071,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "getClientVersion", LuaScriptInterface::luaGameGetClientVersion);
 
 	registerMethod("Game", "reload", LuaScriptInterface::luaGameReload);
+
+	registerMethod("Game", "registerBuffType", LuaScriptInterface::luaGameRegisterBuffType);
 
 	registerMethod("Game", "getAccountStorageValue", LuaScriptInterface::luaGameGetAccountStorageValue);
 	registerMethod("Game", "setAccountStorageValue", LuaScriptInterface::luaGameSetAccountStorageValue);
@@ -2349,6 +2363,12 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Creature", "move", LuaScriptInterface::luaCreatureMove);
 
 	registerMethod("Creature", "getZone", LuaScriptInterface::luaCreatureGetZone);
+
+	registerMethod("Creature", "getBuff", LuaScriptInterface::luaCreatureGetBuff);
+ 	registerMethod("Creature", "addBuff", LuaScriptInterface::luaCreatureAddBuff);
+ 	registerMethod("Creature", "removeBuff", LuaScriptInterface::luaCreatureRemoveBuff);
+ 	registerMethod("Creature", "hasBuff", LuaScriptInterface::luaCreatureHasBuff);
+ 	registerMethod("Creature", "updateBuff", LuaScriptInterface::luaCreatureUpdateBuff);
 
 	// Player
 	registerClass("Player", "Creature", LuaScriptInterface::luaPlayerCreate);
@@ -3104,6 +3124,23 @@ void LuaScriptInterface::registerFunctions()
 
 	// exclusively for wands & distance weapons
 	registerMethod("Weapon", "shootType", LuaScriptInterface::luaWeaponShootType);
+
+	// Buff
+	registerClass("Buff", "", LuaScriptInterface::luaCreateBuff);
+	registerMethod("Buff", "getId", LuaScriptInterface::luaBuffGetId);
+	registerMethod("Buff", "getName", LuaScriptInterface::luaBuffGetName);
+	registerMethod("Buff", "getDescription", LuaScriptInterface::luaBuffGetDescription);
+	registerMethod("Buff", "getIcon", LuaScriptInterface::luaBuffGetIcon);
+	registerMethod("Buff", "getBorder", LuaScriptInterface::luaBuffGetBorder);
+	registerMethod("Buff", "isStacked", LuaScriptInterface::luaBuffIsStacked);
+	registerMethod("Buff", "getStacks", LuaScriptInterface::luaBuffGetStacks);
+	registerMethod("Buff", "getMaxStacks", LuaScriptInterface::luaBuffGetMaxStacks);
+	registerMethod("Buff", "getEndTime", LuaScriptInterface::luaBuffGetEndTime);
+	registerMethod("Buff", "getTicks", LuaScriptInterface::luaBuffGetTicks);
+	registerMethod("Buff", "setTicks", LuaScriptInterface::luaBuffSetTicks);
+	registerMethod("Buff", "refresh", LuaScriptInterface::luaBuffRefresh);
+	registerMethod("Buff", "isDebuff", LuaScriptInterface::luaBuffIsDebuff);
+	registerMethod("Buff", "getCaster", LuaScriptInterface::luaBuffGetCaster);
 }
 
 #undef registerEnum
@@ -4667,6 +4704,47 @@ int LuaScriptInterface::luaGameReload(lua_State* L)
 	lua_gc(g_luaEnvironment.getLuaState(), LUA_GCCOLLECT, 0);
 	return 1;
 }
+
+int LuaScriptInterface::luaGameRegisterBuffType(lua_State* L)
+ {
+ 	// Game.registerBuffType(buffId, buffName, buffDescription, buffIcon, buffBorder, buffStacked, buffMaxStacks, buffTicks, isDebuff)
+ 	BuffId_t buffId = getNumber<BuffId_t>(L, 1);
+ 
+ 	if (buffId >= BUFF_LAST)
+ 	{
+ 		reportErrorFunc(L, "BuffId can't be bigger than BUFF_LAST");
+ 		pushBoolean(L, false);
+ 		return 1;
+ 	}
+ 
+ 	const std::string& buffName = getString(L, 2);
+ 	const std::string& buffDescription = getString(L, 3);
+ 	const std::string& buffIcon = getString(L, 4);
+ 	const std::string& buffBorder = getString(L, 5);
+ 	bool buffStacked = getBoolean(L, 6);
+ 	uint8_t buffMaxStacks = getNumber<uint8_t>(L, 7);
+ 	int32_t buffTicks = getNumber<int32_t>(L, 8);
+ 	bool isDebuff = getBoolean(L, 9, false);
+ 
+ 	if (buffId >= g_game.buffs.size()) {
+ 		uint16_t s = buffId + 1;
+ 		g_game.buffs.resize(s);
+ 	}
+ 	BuffType& buffType = g_game.buffs[buffId];
+ 
+ 	buffType.setId(buffId);
+ 	buffType.setName(buffName);
+ 	buffType.setDescription(buffDescription);
+ 	buffType.setIcon(buffIcon);
+ 	buffType.setBorder(buffBorder);
+ 	buffType.setStacked(buffStacked);
+ 	buffType.setMaxStacks(buffMaxStacks);
+ 	buffType.setTicks(buffTicks);
+ 	buffType.setDebuff(isDebuff);
+ 
+ 	pushBoolean(L, true);
+ 	return 1;
+ }
 
 int LuaScriptInterface::luaGameGetAccountStorageValue(lua_State* L)
 {
@@ -8158,6 +8236,95 @@ int LuaScriptInterface::luaCreatureGetZone(lua_State* L)
 	}
 	return 1;
 }
+
+int LuaScriptInterface::luaCreatureGetBuff(lua_State* L)
+ {
+ 	// creature:getBuff(buffId)
+ 	Creature* creature = getUserdata<Creature>(L, 1);
+ 	if (!creature) {
+ 		lua_pushnil(L);
+ 		return 1;
+ 	}
+ 
+ 	BuffId_t buffId = getNumber<BuffId_t>(L, 2);
+ 
+ 	Buff* buff = creature->getBuff(buffId);
+ 	if (buff) {
+ 		pushUserdata<Buff>(L, buff);
+ 		setMetatable(L, -1, "Buff");
+ 	}
+ 	else {
+ 		lua_pushnil(L);
+ 	}
+ 	return 1;
+ }
+ 
+ int LuaScriptInterface::luaCreatureAddBuff(lua_State* L)
+ {
+ 	// creature:addBuff(buffId, [caster])
+ 	Creature* creature = getUserdata<Creature>(L, 1);
+ 	BuffId_t buffId = getNumber<BuffId_t>(L, 2);
+ 	if (creature) {
+ 		Creature* caster = nullptr;
+ 		if (lua_gettop(L) == 3) {
+ 			caster = getUserdata<Creature>(L, 3);
+ 		}
+ 		pushBoolean(L, creature->addBuff(buffId, caster));
+ 	}
+ 	else {
+ 		lua_pushnil(L);
+ 	}
+ 	return 1;
+ }
+ 
+ int LuaScriptInterface::luaCreatureRemoveBuff(lua_State* L)
+ {
+ 	// creature:removeBuff(buffId)
+ 	Creature* creature = getUserdata<Creature>(L, 1);
+ 	if (!creature) {
+ 		lua_pushnil(L);
+ 		return 1;
+ 	}
+ 
+ 	BuffId_t buffId = getNumber<BuffId_t>(L, 2);
+ 	Buff* buff = creature->getBuff(buffId);
+ 	if (buff) {
+ 		creature->removeBuff(buffId);
+ 		pushBoolean(L, true);
+ 	}
+ 	else {
+ 		lua_pushnil(L);
+ 	}
+ 	return 1;
+ }
+ 
+ int LuaScriptInterface::luaCreatureHasBuff(lua_State* L)
+ {
+ 	// creature:hasBuff(buffId)
+ 	Creature* creature = getUserdata<Creature>(L, 1);
+ 	if (!creature) {
+ 		lua_pushnil(L);
+ 		return 1;
+ 	}
+ 
+ 	BuffId_t buffId = getNumber<BuffId_t>(L, 2);
+ 	pushBoolean(L, creature->hasBuff(buffId));
+ 	return 1;
+ }
+ 
+ int LuaScriptInterface::luaCreatureUpdateBuff(lua_State* L)
+ {
+ 	// creature:updateBuff(buff)
+ 	Creature* creature = getUserdata<Creature>(L, 1);
+ 	Buff* buff = getUserdata<Buff>(L, 2);
+ 	if (creature && buff) {
+ 		creature->updateBuff(buff);
+ 	}
+ 	else {
+ 		lua_pushnil(L);
+ 	}
+ 	return 1;
+ }
 
 // Player
 int LuaScriptInterface::luaPlayerCreate(lua_State* L)
@@ -17220,6 +17387,220 @@ int LuaScriptInterface::luaStoreOfferGetName(lua_State* L) {
 	StoreOffer* offer = getUserdata<StoreOffer>(L, 1);
 	if (offer) {
 		pushString(L, offer->name);
+	}
+	else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+// Buff
+int LuaScriptInterface::luaCreateBuff(lua_State* L)
+{
+	// Buff()
+
+	Buff* buff = new Buff();
+	if (buff) {
+		pushUserdata<Buff>(L, buff);
+		setMetatable(L, -1, "Buff");
+	}
+	else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaBuffGetId(lua_State* L)
+{
+	// buff:getId()
+	Buff* buff = getUserdata<Buff>(L, 1);
+	if (buff) {
+		lua_pushnumber(L, buff->getId());
+	}
+	else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaBuffGetName(lua_State* L)
+{
+	// buff:getName()
+	Buff* buff = getUserdata<Buff>(L, 1);
+	if (buff) {
+		const BuffType& buffType = g_game.buffs[buff->getId()];
+		pushString(L, buffType.getName());
+	}
+	else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaBuffGetDescription(lua_State* L)
+{
+	// buff:getDescription()
+	Buff* buff = getUserdata<Buff>(L, 1);
+	if (buff) {
+		const BuffType& buffType = g_game.buffs[buff->getId()];
+		pushString(L, buffType.getDescription());
+	}
+	else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaBuffGetIcon(lua_State* L)
+{
+	// buff:getIcon()
+	Buff* buff = getUserdata<Buff>(L, 1);
+	if (buff) {
+		const BuffType& buffType = g_game.buffs[buff->getId()];
+		pushString(L, buffType.getIcon());
+	}
+	else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaBuffGetBorder(lua_State* L)
+{
+	// buff:getBorder()
+	Buff* buff = getUserdata<Buff>(L, 1);
+	if (buff) {
+		const BuffType& buffType = g_game.buffs[buff->getId()];
+		pushString(L, buffType.getBorder());
+	}
+	else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaBuffIsStacked(lua_State* L)
+{
+	// buff:isStacked()
+	Buff* buff = getUserdata<Buff>(L, 1);
+	if (buff) {
+		const BuffType& buffType = g_game.buffs[buff->getId()];
+		pushBoolean(L, buffType.isStacked());
+	}
+	else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaBuffGetStacks(lua_State* L)
+{
+	// buff:getStacks()
+	Buff* buff = getUserdata<Buff>(L, 1);
+	if (buff) {
+		lua_pushnumber(L, buff->getStacks());
+	}
+	else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaBuffGetMaxStacks(lua_State* L)
+{
+	// buff:getMaxStacks()
+	Buff* buff = getUserdata<Buff>(L, 1);
+	if (buff) {
+		const BuffType& buffType = g_game.buffs[buff->getId()];
+		lua_pushnumber(L, buffType.getMaxStacks());
+	}
+	else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaBuffGetEndTime(lua_State* L)
+{
+	// buff:getEndTime()
+	Buff* buff = getUserdata<Buff>(L, 1);
+	if (buff) {
+		lua_pushnumber(L, buff->getEndTime());
+	}
+	else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaBuffGetTicks(lua_State* L)
+{
+	// buff:getTicks()
+	Buff* buff = getUserdata<Buff>(L, 1);
+	if (buff) {
+		lua_pushnumber(L, buff->getTicks());
+	}
+	else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaBuffSetTicks(lua_State* L)
+{
+	// buff:setTicks(ticks)
+	int32_t ticks = getNumber<int32_t>(L, 2);
+	Buff* buff = getUserdata<Buff>(L, 1);
+	if (buff) {
+		buff->setTicks(ticks);
+		pushBoolean(L, true);
+	}
+	else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaBuffRefresh(lua_State* L)
+{
+	// buff:refresh()
+	Buff* buff = getUserdata<Buff>(L, 1);
+	if (buff) {
+		buff->refresh();
+		pushBoolean(L, true);
+	}
+	else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaBuffIsDebuff(lua_State* L)
+{
+	// buff:isDebuff()
+	Buff* buff = getUserdata<Buff>(L, 1);
+	if (buff) {
+		pushBoolean(L, buff->isDebuff());
+	}
+	else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaBuffGetCaster(lua_State* L)
+{
+	// buff:getCaster()
+	Buff* buff = getUserdata<Buff>(L, 1);
+	if (buff) {
+		Creature* caster = buff->getCaster();
+		if (caster) {
+			pushUserdata<Creature>(L, caster);
+			setCreatureMetatable(L, -1, caster);
+		}
+		else {
+			lua_pushnil(L);
+		}
 	}
 	else {
 		lua_pushnil(L);

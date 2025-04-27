@@ -8,5 +8,19 @@ condition:setFormula(0.3, -24, 0.3, -24)
 combat:addCondition(condition)
 
 function onCastSpell(creature, variant)
-	return combat:execute(creature, variant)
+    local player = creature:getPlayer()
+    if not player then
+        return false
+    end
+
+    if not player:hasBuff(BUFF_UTANI_HUR) then
+        print("[DEBUG] Aplicando BUFF_UTANI_HUR ao jogador: " .. player:getName())
+        player:addBuff(BUFF_UTANI_HUR)
+        player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Você recebeu o Buff Utani Hur!")
+    else
+        print("[DEBUG] BUFF_UTANI_HUR já está ativo no jogador: " .. player:getName())
+        player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "O Buff Utani Hur já está ativo!")
+    end
+
+    return combat:execute(creature, variant)
 end

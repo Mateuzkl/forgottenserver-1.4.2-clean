@@ -38,6 +38,7 @@ class Condition;
 class Npc;
 class Monster;
 class InstantSpell;
+class Buff;
 
 enum {
 	EVENT_ID_LOADING = 1,
@@ -582,6 +583,8 @@ class LuaScriptInterface
 
 		static int luaGameReload(lua_State* L);
 
+		static int luaGameRegisterBuffType(lua_State *L);
+
 		static int luaGameGetAccountStorageValue(lua_State* L);
 		static int luaGameSetAccountStorageValue(lua_State* L);
 		static int luaGameSaveAccountStorageValues(lua_State* L);
@@ -862,6 +865,12 @@ class LuaScriptInterface
 		static int luaCreatureMove(lua_State* L);
 
 		static int luaCreatureGetZone(lua_State* L);
+
+		static int luaCreatureGetBuff(lua_State *L);
+ 		static int luaCreatureAddBuff(lua_State *L);
+ 		static int luaCreatureRemoveBuff(lua_State *L);
+ 		static int luaCreatureHasBuff(lua_State *L);
+ 		static int luaCreatureUpdateBuff(lua_State *L);
 
 		// Player
 		static int luaPlayerCreate(lua_State* L);
@@ -1570,6 +1579,23 @@ class LuaScriptInterface
 
 		// exclusively for wands & distance weapons
 		static int luaWeaponShootType(lua_State* L);
+
+		// Buff
+		static int luaCreateBuff(lua_State *L);
+		static int luaBuffGetId(lua_State *L);
+		static int luaBuffGetName(lua_State *L);
+		static int luaBuffGetDescription(lua_State *L);
+		static int luaBuffGetIcon(lua_State *L);
+		static int luaBuffGetBorder(lua_State *L);
+		static int luaBuffIsStacked(lua_State *L);
+		static int luaBuffGetStacks(lua_State *L);
+		static int luaBuffGetMaxStacks(lua_State *L);
+		static int luaBuffGetEndTime(lua_State *L);
+		static int luaBuffGetTicks(lua_State *L);
+		static int luaBuffSetTicks(lua_State *L);
+		static int luaBuffRefresh(lua_State *L);
+		static int luaBuffIsDebuff(lua_State *L);
+		static int luaBuffGetCaster(lua_State *L);
 
 		//
 		std::string lastLuaError;

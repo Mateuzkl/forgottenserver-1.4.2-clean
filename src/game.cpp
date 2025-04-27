@@ -3731,6 +3731,7 @@ void Game::checkCreatures(size_t index)
 				creature->onThink(EVENT_CREATURE_THINK_INTERVAL);
 				creature->onAttacking(EVENT_CREATURE_THINK_INTERVAL);
 				creature->executeConditions(EVENT_CREATURE_THINK_INTERVAL);
+				creature->executeBuffs(EVENT_CREATURE_THINK_INTERVAL);
 			}
 			++it;
 		} else {

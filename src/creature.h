@@ -11,9 +11,11 @@
 #include "tile.h"
 #include "enums.h"
 #include "creatureevent.h"
+#include "buff.h"
 
 using ConditionList = std::list<Condition*>;
 using CreatureEventList = std::list<CreatureEvent*>;
+using BuffList = std::list<Buff*>;
 
 enum slots_t : uint8_t {
 	CONST_SLOT_WHEREEVER = 0,
@@ -462,6 +464,15 @@ class Creature : virtual public Thing
 			}
 		}
 
+		bool addBuff(BuffId_t buffId, Creature* caster = nullptr);
+ 		bool addBuff(Buff* buff);
+ 		void updateBuff(Buff* buff);
+ 		void removeBuff(BuffId_t buffId);
+ 		void clearBuffs();
+ 		Buff* getBuff(BuffId_t buffId) const;
+ 		void executeBuffs(uint32_t interval);
+ 		bool hasBuff(BuffId_t buffId) const;
+
 	protected:
 		virtual bool useCacheMap() const {
 			return false;
@@ -485,6 +496,7 @@ class Creature : virtual public Thing
 		std::list<Creature*> summons;
 		CreatureEventList eventsList;
 		ConditionList conditions;
+		BuffList buffs;
 
 		std::vector<Direction> listWalkDir;
 

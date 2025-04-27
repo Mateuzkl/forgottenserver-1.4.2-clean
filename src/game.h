@@ -16,6 +16,7 @@
 #include "npc.h"
 #include "wildcardtree.h"
 #include "quests.h"
+#include "buff.h"
 
 class ServiceManager;
 class Creature;
@@ -496,6 +497,7 @@ class Game
 		Mounts mounts;
 		Raids raids;
 		Quests quests;
+		std::vector<BuffType> buffs;
 
 		std::forward_list<Item*> toDecayItems;
 

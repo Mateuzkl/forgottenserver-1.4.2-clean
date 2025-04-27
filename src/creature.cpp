@@ -8,6 +8,7 @@
 #include "monster.h"
 #include "configmanager.h"
 #include "scheduler.h"
+#include "events.h"
 
 double Creature::speedA = 857.36;
 double Creature::speedB = 261.29;
@@ -16,6 +17,7 @@ double Creature::speedC = -4795.01;
 extern Game g_game;
 extern ConfigManager g_config;
 extern CreatureEvents* g_creatureEvents;
+extern Events* g_events;
 
 Creature::Creature()
 {
@@ -1626,4 +1628,146 @@ bool Creature::getPathTo(const Position& targetPos, std::vector<Direction>& dirL
 	fpp.minTargetDist = minTargetDist;
 	fpp.maxTargetDist = maxTargetDist;
 	return getPathTo(targetPos, dirList, fpp);
+}
+
+// Buffs
+bool Creature::addBuff(BuffId_t buffId, Creature* caster)
+{
+	if (buffId >= g_game.buffs.size()) {
+		std::cout << "[Error - Creature::addBuff] Invalid buff id: " << buffId << std::endl;
+		return false;
+	}
+
+	const BuffType& buffType = g_game.buffs[buffId];
+	if (!buffType.getId()) {
+		std::cout << "[Error - Creature::addBuff 2] Invalid buff id: " << buffId << std::endl;
+		return false;
+	}
+
+	Buff* buff = nullptr;
+
+	if (hasBuff(buffId)) {
+		buff = getBuff(buffId);
+		if (caster)
+			buff->setCaster(caster);
+		if (buffType.isStacked() && buff->getStacks() < buffType.getMaxStacks()) {
+			buff->addStacks(1);
+		}
+		else {
+			buff->refresh();
+		}
+
+		g_events->eventCreatureOnBuffUpdated(this, buff);
+	}
+	else {
+		buff = new Buff(buffType);
+		if (caster)
+			buff->setCaster(caster);
+		buff->refresh();
+		g_events->eventCreatureOnBuffAdded(this, buff);
+		buffs.push_back(buff);
+	}
+
+	if (buff) {
+		buff->startBuff(this);
+	}
+
+	return true;
+}
+
+bool Creature::addBuff(Buff* buff)
+{
+	if (buff) {
+		buff->refresh();
+		g_events->eventCreatureOnBuffAdded(this, buff);
+		buffs.push_back(buff);
+		buff->startBuff(this);
+		return true;
+	}
+
+	return false;
+}
+
+void Creature::removeBuff(BuffId_t buffId)
+{
+	auto it = buffs.begin(), end = buffs.end();
+	while (it != end) {
+		Buff* buff = *it;
+		if (buff->getId() != buffId) {
+			++it;
+			continue;
+		}
+
+		it = buffs.erase(it);
+
+		buff->endBuff(this);
+		g_events->eventCreatureOnBuffRemoved(this, buff);
+		delete buff;
+		break;
+	}
+}
+
+Buff* Creature::getBuff(BuffId_t buffId) const
+{
+	for (Buff* buff : buffs) {
+		if (buff->getId() == buffId) {
+			return buff;
+		}
+	}
+	return nullptr;
+}
+
+void Creature::executeBuffs(uint32_t interval)
+{
+	BuffList tempBuffs{ buffs };
+	for (Buff* buff : tempBuffs) {
+		auto it = std::find(buffs.begin(), buffs.end(), buff);
+		if (it == buffs.end()) {
+			continue;
+		}
+
+		if (!buff || !buff->executeBuff(this, interval)) {
+			it = std::find(buffs.begin(), buffs.end(), buff);
+			if (it != buffs.end()) {
+				buffs.erase(it);
+				buff->endBuff(this);
+				g_events->eventCreatureOnBuffRemoved(this, buff);
+				delete buff;
+			}
+		}
+	}
+}
+
+bool Creature::hasBuff(BuffId_t buffId) const
+{
+	int64_t timeNow = OTSYS_TIME();
+	for (Buff* buff : buffs) {
+		if (buff->getId() != buffId) {
+			continue;
+		}
+
+		if (buff->getEndTime() >= timeNow || buff->getTicks() == -1) {
+			return true;
+		}
+	}
+	return false;
+}
+
+void Creature::clearBuffs()
+{
+	auto it = buffs.begin(), end = buffs.end();
+	while (it != end) {
+		Buff* buff = *it;
+		it = buffs.erase(it);
+
+		buff->endBuff(this);
+		g_events->eventCreatureOnBuffRemoved(this, buff);
+		delete buff;
+		break;
+	}
+}
+
+void Creature::updateBuff(Buff* buff)
+{
+	g_events->eventCreatureOnBuffUpdated(this, buff);
 }

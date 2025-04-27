@@ -6,6 +6,11 @@
 	<event class="Creature" method="onTargetCombat" enabled="0" />
 	<event class="Creature" method="onHear" enabled="0" />
 
+	<event class="Creature" method="onBuffAdded" enabled="1" />
+ 	<event class="Creature" method="onBuffUpdated" enabled="1" />
+ 	<event class="Creature" method="onBuffRemoved" enabled="1" />
+
+
 	<!-- Party methods -->
 	<event class="Party" method="onJoin" enabled="0" />
 	<event class="Party" method="onLeave" enabled="0" />

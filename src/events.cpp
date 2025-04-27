@@ -54,6 +54,12 @@ bool Events::load()
 				info.creatureOnTargetCombat = event;
 			} else if (methodName == "onHear") {
 				info.creatureOnHear = event;
+			} else if (methodName == "onBuffAdded") {
+				info.creatureOnBuffAdded = event;
+			} else if (methodName == "onBuffUpdated") {
+				info.creatureOnBuffUpdated = event;
+			} else if (methodName == "onBuffRemoved") {
+				info.creatureOnBuffRemoved = event;
 			} else {
 				std::cout << "[Warning - Events::load] Unknown creature method: " << methodName << std::endl;
 			}
@@ -294,6 +300,87 @@ void Events::eventCreatureOnHear(Creature* creature, Creature* speaker, const st
 
 	scriptInterface.callVoidFunction(4);
 }
+
+void Events::eventCreatureOnBuffAdded(Creature* creature, Buff* buff)
+ {
+ 	// Creature:onBuffAdded(buff)
+ 	if (info.creatureOnBuffAdded == -1) {
+ 		return;
+ 	}
+ 
+ 	if (!scriptInterface.reserveScriptEnv()) {
+ 		std::cout << "[Error - Events::eventCreatureOnBuffAdded] Call stack overflow" << std::endl;
+ 		return;
+ 	}
+ 
+ 	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+ 	env->setScriptId(info.creatureOnBuffAdded, &scriptInterface);
+ 
+ 	lua_State* L = scriptInterface.getLuaState();
+ 	scriptInterface.pushFunction(info.creatureOnBuffAdded);
+ 
+ 	LuaScriptInterface::pushUserdata<Creature>(L, creature);
+ 	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
+ 
+ 	LuaScriptInterface::pushUserdata<Buff>(L, buff);
+ 	LuaScriptInterface::setMetatable(L, -1, "Buff");
+ 
+ 	scriptInterface.callVoidFunction(2);
+ }
+ 
+ void Events::eventCreatureOnBuffUpdated(Creature* creature, Buff* buff)
+ {
+ 	// Creature:onBuffUpdated(buff)
+ 	if (info.creatureOnBuffUpdated == -1) {
+ 		return;
+ 	}
+ 
+ 	if (!scriptInterface.reserveScriptEnv()) {
+ 		std::cout << "[Error - Events::eventCreatureOnBuffUpdated] Call stack overflow" << std::endl;
+ 		return;
+ 	}
+ 
+ 	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+ 	env->setScriptId(info.creatureOnBuffUpdated, &scriptInterface);
+ 
+ 	lua_State* L = scriptInterface.getLuaState();
+ 	scriptInterface.pushFunction(info.creatureOnBuffUpdated);
+ 
+ 	LuaScriptInterface::pushUserdata<Creature>(L, creature);
+ 	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
+ 
+ 	LuaScriptInterface::pushUserdata<Buff>(L, buff);
+ 	LuaScriptInterface::setMetatable(L, -1, "Buff");
+ 
+ 	scriptInterface.callVoidFunction(2);
+ }
+ 
+ void Events::eventCreatureOnBuffRemoved(Creature* creature, Buff* buff)
+ {
+ 	// Creature:onBuffRemoved(buff)
+ 	if (info.creatureOnBuffRemoved == -1) {
+ 		return;
+ 	}
+ 
+ 	if (!scriptInterface.reserveScriptEnv()) {
+ 		std::cout << "[Error - Events::eventCreatureOnBuffRemoved] Call stack overflow" << std::endl;
+ 		return;
+ 	}
+ 
+ 	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+ 	env->setScriptId(info.creatureOnBuffRemoved, &scriptInterface);
+ 
+ 	lua_State* L = scriptInterface.getLuaState();
+ 	scriptInterface.pushFunction(info.creatureOnBuffRemoved);
+ 
+ 	LuaScriptInterface::pushUserdata<Creature>(L, creature);
+ 	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
+ 
+ 	LuaScriptInterface::pushUserdata<Buff>(L, buff);
+ 	LuaScriptInterface::setMetatable(L, -1, "Buff");
+ 
+ 	scriptInterface.callVoidFunction(2);
+ }
 
 // Party
 bool Events::eventPartyOnJoin(Party* party, Player* player)
